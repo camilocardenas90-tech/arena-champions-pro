@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PANEL DE CONTROL TOTAL - ADMINISTRADOR</title>
+    <style>
+        body { background-color: #020617; color: #ffffff; font-family: 'Arial Black', sans-serif; padding: 20px; text-align: center; }
+        .admin-card { background-color: #0b1329; border: 3px solid #38bdf8; border-radius: 25px; max-width: 950px; margin: 0 auto 30px auto; padding: 25px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.2); box-sizing: border-box; }
+        .neon-title { color: #ffd700; font-size: 2rem; font-style: italic; text-transform: uppercase; margin-bottom: 20px; text-shadow: 0 0 10px #ffd700; }
+        .admin-table { width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 0.9rem; margin-top: 15px; }
+        .admin-table th { color: #38bdf8; border-bottom: 2px solid #1e293b; padding: 10px; text-transform: uppercase; font-size: 0.8rem; }
+        .admin-table td { padding: 12px 8px; border-bottom: 1px solid #111; color: #ccc; text-align: center; }
+        .btn-action { background: #000; border: 2px solid #e11d48; color: #e11d48; padding: 8px 16px; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 0.75rem; text-transform: uppercase; display: inline-block; cursor: pointer; transition: 0.2s; }
+        .btn-action:hover { background: #e11d48; color: #000; box-shadow: 0 0 10px #e11d48; }
+        .btn-nav { display: inline-block; background: #000; color: #38bdf8; border: 2px solid #38bdf8; padding: 10px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; margin-bottom: 25px; text-transform: uppercase; font-size: 0.9rem; }
+        .btn-danger-giant { background: linear-gradient(90deg, #e11d48, #91122e); color: white; border: none; padding: 16px 35px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 5px 15px rgba(225, 29, 72, 0.4); font-family: 'Arial Black', sans-serif; }
+    </style>
+</head>
+<body>
+    <a href="/dashboard" class="btn-nav">⬅️ VOLVER AL DASHBOARD PRINCIPAL</a>
+    
+    <!-- CONSOLA CRÍTICA DE COMISIONADO: REINICIO MANUAL -->
+    <div class="admin-card" style="border-color: #e11d48; box-shadow: 0 0 30px rgba(225, 29, 72, 0.25);">
+        <h2 class="neon-title" style="color: #e11d48; text-shadow: 0 0 10px #e11d48;">🚨 CONTROL SEMANAL DE LA ARENA</h2>
+        <p style="font-family: sans-serif; font-size: 0.9rem; color: #94a3b8; line-height: 1.4; max-width: 700px; margin: 0 auto 20px auto;">
+            Al presionar este botón, **reiniciarás manualmente los marcadores de la semana a 0 puntos** para todos los jugadores y les cerrarás el candado de apuestas. Úsalo solo cuando hayas pagado el premio de la fecha en el grupo de WhatsApp.
+        </p>
+        <a href="/admin_reiniciar_semana_manual" class="btn-danger-giant" onclick="return confirm('¿ESTÁS SEGURO? Esto pondrá los puntajes semanales en cero y bloqueará a los usuarios hasta su próximo pago.')">
+            🔄 REINICIAR TABLERO SEMANAL AHORA
+        </a>
+    </div>
+
+    <!-- CONSOLA 2: CARGA DE PARTIDOS CON SELECTOR CHAMPIONS -->
+    <div class="admin-card">
+        <h2 class="neon-title">⚡ INYECTOR MASIVO DE PARTIDOS</h2>
+        <form action="/admin_carga_masiva" method="POST">
+            <textarea name="lista_partidos" rows="4" style="width: 94%; background: #020617; color: #fff; border: 2px solid #38bdf8; border-radius: 15px; padding: 15px; font-family: monospace; outline: none;" placeholder="Real Madrid,rm,Barcelona,bar,15,9,16,0" required></textarea>
+            <br><br>
+            <div style="margin-bottom: 20px;">
+                <label style="color: #aaa; font-family: sans-serif; font-size: 0.9rem; font-weight: bold; margin-right: 10px;">🗺️ ETAPAS DE LA CHAMPIONS:</label>
+                <select name="instancia_playoff" style="background: #020617; color: #ffd700; border: 2px solid #38bdf8; padding: 10px; border-radius: 12px; font-weight: bold; outline: none;">
+                    <option value="FASE_LIGA">FASE DE LIGA (Grupos Europeos)</option>
+                    <option value="OCTAVOS">OCTAVOS DE FINAL</option>
+                    <option value="CUARTOS">CUARTOS DE FINAL</option>
+                    <option value="SEMIFINAL">SEMIFINALES</option>
+                    <option value="GRAN_FINAL">LA GRAN FINAL 🏆</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-action" style="border-color:#38bdf8; color:#38bdf8; padding: 12px 30px; font-size:0.9rem;">CARGAR CARTELERA</button>
+        </form>
+    </div>
+</body>
+</html>
