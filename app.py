@@ -6,34 +6,32 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "CLAVE_SECRETA_CHAMPIONS_2026")
 
-# Conexión automática adaptable para el plan Hobby de Railway
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///arena_champions.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# ================= MODELOS DE LA BASE DE DATOS OREJONA =================
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     clave = db.Column(db.String(120), nullable=False)
-    puntos_semana = db.Column(db.Integer, default=0)    # Lo reinicias tú con el botón manual
-    exactos_semana = db.Column(db.Integer, default=0)   # Desempate de la semana
-    puntos_general = db.Column(db.Integer, default=0)   # Histórico acumulado para la posteridad
-    exactos_general = db.Column(db.Integer, default=0)  # Histórico exactos general
+    puntos_semana = db.Column(db.Integer, default=0)
+    exactos_semana = db.Column(db.Integer, default=0)
+    puntos_general = db.Column(db.Integer, default=0)
+    exactos_general = db.Column(db.Integer, default=0)
     pago_jornada_actual = db.Column(db.Boolean, default=False)
-    es_comisionado = db.Column(db.Boolean, default=False) # Tu usuario Dios libre de bloqueos
+    es_comisionado = db.Column(db.Boolean, default=False)
 
 class PartidoChampions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     club_local = db.Column(db.String(100), nullable=False)
-    logo_local = db.Column(db.String(50), nullable=False)  
+    logo_local = db.Column(db.String(50), nullable=False)
     club_visita = db.Column(db.String(100), nullable=False)
     logo_visita = db.Column(db.String(50), nullable=False)
     goles_local_real = db.Column(db.Integer, default=-1)
     goles_visita_real = db.Column(db.Integer, default=-1)
     fecha_inicio = db.Column(db.DateTime, nullable=False)
-    instancia = db.Column(db.String(50), default="FASE_LIGA") # FASE_LIGA, OCTAVOS, CUARTOS, SEMIFINAL, GRAN_FINAL
+    instancia = db.Column(db.String(50), default="FASE_LIGA")
     es_playoffs = db.Column(db.Boolean, default=False)
     cerrado = db.Column(db.Boolean, default=False)
 
@@ -43,11 +41,9 @@ class ApuestaChampions(db.Model):
     partido_id = db.Column(db.Integer, db.ForeignKey('partido_champions.id'), nullable=False)
     pred_goles_l = db.Column(db.Integer, nullable=False)
     pred_goles_v = db.Column(db.Integer, nullable=False)
-    pred_penales = db.Column(db.String(100), default="") 
-# Creación automática de las tablas en la nube de Railway
+    pred_penales = db.Column(db.String(100), default="")
 with app.app_context():
     db.create_all()
-    # Tu súper usuario Comisionado libre de cualquier paywall o bloqueo
     if not Usuario.query.filter_by(email="admin@champions.cl").first():
         admin = Usuario(nombre="K-milo", email="admin@champions.cl", clave="champions2026", es_comisionado=True, pago_jornada_actual=True)
         db.session.add(admin)
@@ -64,11 +60,9 @@ def registrar():
     nombre = request.form['nombre']
     email = request.form['email']
     clave = request.form['clave']
-    
     if Usuario.query.filter_by(email=email).first():
         flash("Este correo electrónico ya está registrado.")
         return redirect('/')
-        
     nuevo_user = Usuario(nombre=nombre, email=email, clave=clave)
     db.session.add(nuevo_user)
     db.session.commit()
@@ -80,7 +74,6 @@ def login():
     email = request.form['email']
     clave = request.form['clave']
     user = Usuario.query.filter_by(email=email, clave=clave).first()
-    
     if user:
         session['user_id'] = user.id
         session['user_nombre'] = user.nombre
@@ -93,18 +86,47 @@ def login():
 def logout():
     session.clear()
     return redirect('/')
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        return redirect('/')
+    usuario_actual = Usuario.query.get(session['user_id'])
+    partidos = PartidoChampions.query.all()
+    ranking_semana = Usuario.query.order_by(Usuario.puntos_semana.desc(), Usuario.exactos_semana.desc()).all()
+    ranking_general = Usuario.query.order_by(Usuario.puntos_general.desc(), Usuario.exactos_general.desc()).all()
+    
+    # 💵 Cálculo matemático en vivo del Pozo de la Jornada (El 80%)
+    usuarios_pagados = Usuario.query.filter_by(pago_jornada_actual=True).count()
+    pozo_total = usuarios_pagados * 2000
+    premio_80 = int(pozo_total * 0.80)
+    
+    # Rescatamos los pronósticos guardados del jugador para que aparezcan en sus casillas
+    apuestas_user = ApuestaChampions.query.filter_by(usuario_id=usuario_actual.id).all()
+    mis_apuestas = {a.partido_id: a for a in apuestas_user}
+    
+    # Link de prueba espejo (Sandbox) de Mercado Pago para probar el botón gratis en julio
+    link_mercadopago = "https://mercadopago.cl"
+    
+    return render_template('dashboard.html', 
+                           usuario_actual=usuario_actual, 
+                           partidos=partidos, 
+                           ranking_semana=ranking_semana, 
+                           ranking_general=ranking_general, 
+                           premio_80=premio_80, 
+                           mis_apuestas=mis_apuestas, 
+                           link_mercadopago=link_mercadopago)
+
 @app.route('/apostar/<int:partido_id>', methods=['POST'])
 def apostar(partido_id):
     if 'user_id' not in session:
         return redirect('/')
-        
     user = Usuario.query.get(session['user_id'])
     partido = PartidoChampions.query.get(partido_id)
     ahora = datetime.now()
     
-    # Candado de Pago por Jornada (No aplica para K-milo)
+    # Candado de Pago por Jornada (No aplica para ti como Comisionado)
     if not user.pago_jornada_actual and not user.es_comisionado:
-        flash("ACCESO RESTRINGIDO: Debes pagar tu inscripción de $2.000 para habilitar tus pronósticos de la fecha.")
+        flash("ACCESO RESTRINGIDO: Debes pagar tu inscripción para habilitar tus pronósticos.")
         return redirect('/dashboard')
         
     if partido.fecha_inicio < ahora or partido.cerrado:
@@ -128,21 +150,27 @@ def apostar(partido_id):
     flash("Pronóstico guardado exitosamente.")
     return redirect('/dashboard')
 
-# ================= EL REINICIO MANUAL DEL COMISIONADO ESTRELLA =================
+@app.route('/admin_control_total')
+def admin_control_total():
+    if 'user_id' not in session or not session.get('es_admin'):
+        return redirect('/')
+    usuarios = Usuario.query.filter_by(es_comisionado=False).all()
+    partidos = PartidoChampions.query.all()
+    return render_template('admin_control.html', usuarios=usuarios, partidos=partidos)
+
 @app.route('/admin_reiniciar_semana_manual')
 def admin_reiniciar_semana_manual():
     if 'user_id' not in session or not session.get('es_admin'):
         return redirect('/')
         
-    # El código recorre a todos tus amigos en la base de datos
     usuarios = Usuario.query.all()
     for u in usuarios:
-        u.puntos_semana = 0      # Limpieza total para la nueva fecha
-        u.exactos_semana = 0     # Reseteo del desempate de la fecha
-        u.pago_jornada_actual = False  # Les cierra el candado de apuestas hasta que paguen la nueva ronda
+        u.puntos_semana = 0            # Limpieza para la nueva fecha
+        u.exactos_semana = 0           # Reseteo del desempate semanal
+        u.pago_jornada_actual = False  # Cierra el candado general hasta el próximo pago
         
     db.session.commit()
-    flash("Arena purificada con éxito. ¡Tablero en cero para la nueva Jornada de Champions!")
+    flash("Arena purificada con éxito. ¡Tablero semanal en cero para la nueva fecha de Champions!")
     return redirect('/admin_control_total')
 
 if __name__ == '__main__':
