@@ -19,7 +19,7 @@ class Usuario(db.Model):
     exactos_semana = db.Column(db.Integer, default=0)
     puntos_general = db.Column(db.Integer, default=0)
     exactos_general = db.Column(db.Integer, default=0)
-    pago_jornada_actual = db.Column(db.Boolean, default=False)
+    pago_jornada_actual = db.Column(db.Boolean, default=True) # Liberado por defecto para la maqueta
     es_comisionado = db.Column(db.Boolean, default=False)
 
 class PartidoChampions(db.Model):
@@ -63,7 +63,7 @@ def registrar():
     if Usuario.query.filter_by(email=email).first():
         flash("Este correo electrónico ya está registrado.")
         return redirect('/')
-    nuevo_user = Usuario(nombre=nombre, email=email, clave=clave)
+    nuevo_user = Usuario(nombre=nombre, email=email, clave=clave, pago_jornada_actual=True)
     db.session.add(nuevo_user)
     db.session.commit()
     flash("¡Registro exitoso en la Arena Champions Pro!")
@@ -95,17 +95,12 @@ def dashboard():
     ranking_semana = Usuario.query.order_by(Usuario.puntos_semana.desc(), Usuario.exactos_semana.desc()).all()
     ranking_general = Usuario.query.order_by(Usuario.puntos_general.desc(), Usuario.exactos_general.desc()).all()
     
-    # 💵 Cálculo matemático en vivo del Pozo de la Jornada (El 80%)
-    usuarios_pagados = Usuario.query.filter_by(pago_jornada_actual=True).count()
-    pozo_total = usuarios_pagados * 2000
-    premio_80 = int(pozo_total * 0.80)
+    # Simulación estética del pozo para la maqueta visual sin pasarela activa por ahora
+    premio_80 = 0
     
-    # Rescatamos los pronósticos guardados del jugador para que aparezcan en sus casillas
     apuestas_user = ApuestaChampions.query.filter_by(usuario_id=usuario_actual.id).all()
     mis_apuestas = {a.partido_id: a for a in apuestas_user}
-    
-    # Link de prueba espejo (Sandbox) de Mercado Pago para probar el botón gratis en julio
-    link_mercadopago = "https://mercadopago.cl"
+    link_mercadopago = "#"
     
     return render_template('dashboard.html', 
                            usuario_actual=usuario_actual, 
@@ -124,11 +119,6 @@ def apostar(partido_id):
     partido = PartidoChampions.query.get(partido_id)
     ahora = datetime.now()
     
-    # Candado de Pago por Jornada (No aplica para ti como Comisionado)
-    if not user.pago_jornada_actual and not user.es_comisionado:
-        flash("ACCESO RESTRINGIDO: Debes pagar tu inscripción para habilitar tus pronósticos.")
-        return redirect('/dashboard')
-        
     if partido.fecha_inicio < ahora or partido.cerrado:
         flash("Mercado cerrado. No se permiten apuestas fuera de tiempo.")
         return redirect('/dashboard')
@@ -162,15 +152,12 @@ def admin_control_total():
 def admin_reiniciar_semana_manual():
     if 'user_id' not in session or not session.get('es_admin'):
         return redirect('/')
-        
     usuarios = Usuario.query.all()
     for u in usuarios:
-        u.puntos_semana = 0            # Limpieza para la nueva fecha
-        u.exactos_semana = 0           # Reseteo del desempate semanal
-        u.pago_jornada_actual = False  # Cierra el candado general hasta el próximo pago
-        
+        u.puntos_semana = 0
+        u.exactos_semana = 0
     db.session.commit()
-    flash("Arena purificada con éxito. ¡Tablero semanal en cero para la nueva fecha de Champions!")
+    flash("Arena purificada con éxito. ¡Tablero en cero para la nueva Jornada!")
     return redirect('/admin_control_total')
 
 if __name__ == '__main__':
