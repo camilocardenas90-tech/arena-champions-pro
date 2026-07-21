@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARENA CHAMPIONS PRO - LOGIN</title>
+    <style>
+        body { 
+            background: radial-gradient(circle at center, #0a1128 0%, #020617 100%); 
+            color: #ffffff; 
+            font-family: 'Arial Black', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            box-sizing: border-box;
+        }
+        .login-card { 
+            background: rgba(15, 23, 42, 0.45); 
+            border: 2px solid #38bdf8; 
+            border-radius: 35px; 
+            padding: 35px 20px; 
+            max-width: 420px; 
+            width: 100%; 
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.25); 
+            backdrop-filter: blur(12px);
+            text-align: center;
+        }
+        .champions-stars { font-size: 2.2rem; color: #bae6fd; text-shadow: 0 0 10px rgba(56, 189, 248, 0.6); margin-bottom: 5px; }
+        .title-login { font-size: 1.8rem; font-style: italic; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 25px 0; color: #ffffff; text-shadow: 0 0 10px #38bdf8; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .label-form { display: block; font-family: sans-serif; font-size: 0.85rem; font-weight: bold; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .input-form { width: 100%; background: #020617; color: #fff; border: 2px solid #1e293b; padding: 14px; border-radius: 15px; font-size: 1rem; font-family: sans-serif; outline: none; box-sizing: border-box; }
+        .input-form:focus { border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+        .btn-submit { background: linear-gradient(90deg, #0284c7, #38bdf8); border: none; color: white; font-size: 1.1rem; font-weight: 900; padding: 15px; border-radius: 50px; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4); margin-top: 10px; font-family: 'Arial Black', sans-serif; }
+        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6); }
+        .flash-box { background: #e11d48; color: white; padding: 12px; border-radius: 12px; font-weight: bold; font-family: sans-serif; font-size: 0.85rem; margin-bottom: 20px; }
+        .toggle-text { font-family: sans-serif; font-size: 0.85rem; color: #38bdf8; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="champions-stars">⭐✨⭐</div>
+        <h1 class="title-login">ARENA CHAMPIONS</h1>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for m in messages %}
+                    <div class="flash-box">⚠️ {{ m }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- FORMULARIO DE INICIO DE SESIÓN -->
+        <div id="box-login">
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <label class="label-form">📧 Correo Electrónico:</label>
+                    <input type="email" name="email" class="input-form" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="label-form">🔒 Contraseña de Acceso:</label>
+                    <input type="password" name="clave" class="input-form" placeholder="•••••" required>
+                </div>
+                <button type="submit" class="btn-submit">INGRESAR A LA ARENA</button>
+            </form>
+            <span class="toggle-text" onclick="toggleForm('registro')">¿No tienes cuenta? Regístrate aquí</span>
+        </div>
+
+        <!-- FORMULARIO DE REGISTRO NUEVO -->
+        <div id="box-registro" style="display: none;">
+            <form action="/registrar" method="POST">
+                <div class="form-group">
+                    <label class="label-form">👤 Nombre o Apodo:</label>
+                    <input type="text" name="nombre" class="input-form" placeholder="Tu Nombre" required>
+                </div>
+                <div class="form-group">
+                    <label class="label-form">📧 Correo Electrónico:</label>
+                    <input type="email" name="email" class="input-form" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="label-form">🔒 Elige una Contraseña:</label>
+                    <input type="password" name="clave" class="input-form" placeholder="•••••" required>
+                </div>
+                <button type="submit" class="btn-submit" style="background: linear-gradient(90deg, #10b981, #059669);">CREAR CUENTA</button>
+            </form>
+            <span class="toggle-text" style="color:#10b981;" onclick="toggleForm('login')">¿Ya tienes cuenta? Inicia sesión</span>
+        </div>
+    </div>
+
+    <script>
+        function toggleForm(vista) {
+            var boxLogin = document.getElementById("box-login");
+            var boxRegistro = document.getElementById("box-registro");
+            if (vista === 'registro') {
+                boxLogin.style.display = "none";
+                boxRegistro.style.display = "block";
+            } else {
+                boxLogin.style.display = "block";
+                boxRegistro.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
