@@ -105,10 +105,17 @@ def logout():
 def dashboard():
     if 'user_id' not in session:
         return redirect('/')
+        
     usuario_actual = Usuario.query.get(session['user_id'])
-    partidos = PartidoChampions.query.all()
     
-    # Mapeo exacto de las variables de rankings requeridas por el HTML
+    # 🔥 EL PARCHE MAESTRO ANTI-BUCLES DE SESIÓN ACTIVO:
+    # Si tu navegador normal guardó una sesión vieja pero la base de datos actual no te encuentra,
+    # el sistema destruye las cookies corruptas de inmediato y te manda a loguear en seco de forma limpia.
+    if not usuario_actual:
+        session.clear()
+        return redirect('/')
+        
+    partidos = PartidoChampions.query.all()
     ranking_semana = Usuario.query.order_by(Usuario.puntos_semana.desc(), Usuario.exactos_semana.desc()).all()
     ranking_general = Usuario.query.order_by(Usuario.puntos_general.desc(), Usuario.exactos_general.desc()).all()
     
