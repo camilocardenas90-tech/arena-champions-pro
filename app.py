@@ -6,8 +6,9 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "CLAVE_SECRETA_CHAMPIONS_2026")
 
-# Conexión automática adaptable para la base de datos local en Railway
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///arena_champions.db")
+# 🔥 EL CAMBIO ESTRATÉGICO: Almacenamiento en memoria RAM ultra rápida
+# Evita bloqueos de archivos físicos dinámicos en los servidores de Railway
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -48,10 +49,10 @@ class ApuestaChampions(db.Model):
 # ================= INICIALIZACIÓN INDESTRUCTIBLE DE LA ARENA =================
 @app.before_request
 def inicializar_base_datos_segura():
-    # 1. Le ordena a Railway crear las tablas SQL de la Champions al vuelo si se borran
+    # Crea las tablas SQL al vuelo en la memoria RAM en cada clic
     db.create_all()
     
-    # 2. Inyector Maestro: Asegura que tu cuenta de Comisionado exista siempre en la base de datos
+    # Inyector Maestro: Asegura que tu cuenta de Comisionado exista siempre
     admin_existe = Usuario.query.filter_by(email="admin@champions.cl").first()
     if not admin_existe:
         admin = Usuario(
