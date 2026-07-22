@@ -45,11 +45,15 @@ class ApuestaChampions(db.Model):
     pred_goles_v = db.Column(db.Integer, nullable=False)
     pred_penales = db.Column(db.String(100), default="")
 
-# ================= INICIALIZACIÓN AUTOMÁTICA SEGURA DE LA ARENA =================
+# ================= INICIALIZACIÓN INDESTRUCTIBLE DE LA ARENA =================
 @app.before_request
 def inicializar_base_datos_segura():
+    # 1. Le ordena a Railway crear las tablas SQL de la Champions al vuelo si se borran
     db.create_all()
-    if not Usuario.query.filter_by(email="admin@champions.cl").first():
+    
+    # 2. Inyector Maestro: Asegura que tu cuenta de Comisionado exista siempre en la base de datos
+    admin_existe = Usuario.query.filter_by(email="admin@champions.cl").first()
+    if not admin_existe:
         admin = Usuario(
             nombre="K-milo", 
             email="admin@champions.cl", 
@@ -108,9 +112,7 @@ def dashboard():
         
     usuario_actual = Usuario.query.get(session['user_id'])
     
-    # 🔥 EL PARCHE MAESTRO ANTI-BUCLES DE SESIÓN ACTIVO:
-    # Si tu navegador normal guardó una sesión vieja pero la base de datos actual no te encuentra,
-    # el sistema destruye las cookies corruptas de inmediato y te manda a loguear en seco de forma limpia.
+    # Parche anti-bucles de sesión: si las cookies persisten pero el usuario fue purgado
     if not usuario_actual:
         session.clear()
         return redirect('/')
