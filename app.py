@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "CLAVE_SECRETA_CHAMPIONS_2026")
 
-# Conexión automática adaptable para la base de datos en Railway
+# Conexión automática adaptable para la base de datos local en Railway
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///arena_champions.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -107,14 +107,16 @@ def dashboard():
         return redirect('/')
     usuario_actual = Usuario.query.get(session['user_id'])
     partidos = PartidoChampions.query.all()
+    
+    # Mapeo exacto de las variables de rankings requeridas por el HTML
     ranking_semana = Usuario.query.order_by(Usuario.puntos_semana.desc(), Usuario.exactos_semana.desc()).all()
     ranking_general = Usuario.query.order_by(Usuario.puntos_general.desc(), Usuario.exactos_general.desc()).all()
     
     premio_80 = 0
+    link_mercadopago = "#"
     
     apuestas_user = ApuestaChampions.query.filter_by(usuario_id=usuario_actual.id).all()
     mis_apuestas = {a.partido_id: a for a in apuestas_user}
-    link_mercadopago = "#"
     
     return render_template('dashboard.html', 
                            usuario_actual=usuario_actual, 
