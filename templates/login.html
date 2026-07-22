@@ -66,9 +66,9 @@
             {% endif %}
         {% endwith %}
 
-        <!-- FORMULARIO DE INICIO DE SESIÓN CORREGIDO -->
+        <!-- FORMULARIO DE ACCESO BLINDADO CON LA RUTA DINÁMICA DE PYTHON -->
         <div id="box-login">
-            <form action="/login" method="POST">
+            <form action="{{ url_for('login') }}" method="POST">
                 <div class="form-group">
                     <label class="label-form">Correo Electrónico</label>
                     <input type="email" name="email" class="input-form" placeholder="nombre@correo.com" required>
@@ -82,9 +82,9 @@
             <span class="toggle-text" onclick="cambiarVista('registro')">¿No tienes cuenta? Regístrate aquí</span>
         </div>
 
-        <!-- FORMULARIO DE REGISTRO -->
+        <!-- FORMULARIO DE REGISTRO BLINDADO -->
         <div id="box-registro" style="display: none;">
-            <form action="/registrar" method="POST">
+            <form action="{{ url_for('registrar') }}" method="POST">
                 <div class="form-group">
                     <label class="label-form">Nombre o Apodo</label>
                     <input type="text" name="nombre" class="input-form" placeholder="Tu Apodo" required>
