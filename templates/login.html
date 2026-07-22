@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARENA CHAMPIONS PRO - LOGIN</title>
+    <title>ARENA CHAMPIONS PRO - ACCESO ELITE</title>
     <style>
         body { 
-            background: radial-gradient(circle at center, #0a1128 0%, #020617 100%); 
+            background: radial-gradient(circle at 30% 30%, #0d1b3e 0%, #030712 100%); 
             color: #ffffff; 
-            font-family: 'Arial Black', sans-serif; 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
             margin: 0; 
             padding: 20px; 
             display: flex; 
@@ -19,31 +19,46 @@
         }
         .login-card { 
             background: rgba(15, 23, 42, 0.45); 
-            border: 2px solid #38bdf8; 
-            border-radius: 35px; 
-            padding: 35px 20px; 
-            max-width: 420px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 24px; 
+            padding: 45px 30px; 
+            max-width: 400px; 
             width: 100%; 
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.25); 
-            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             text-align: center;
         }
-        .champions-stars { font-size: 2.2rem; color: #bae6fd; text-shadow: 0 0 10px rgba(56, 189, 248, 0.6); margin-bottom: 5px; }
-        .title-login { font-size: 1.8rem; font-style: italic; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 25px 0; color: #ffffff; text-shadow: 0 0 10px #38bdf8; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .label-form { display: block; font-family: sans-serif; font-size: 0.85rem; font-weight: bold; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .input-form { width: 100%; background: #020617; color: #fff; border: 2px solid #1e293b; padding: 14px; border-radius: 15px; font-size: 1rem; font-family: sans-serif; outline: none; box-sizing: border-box; }
-        .input-form:focus { border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
-        .btn-submit { background: linear-gradient(90deg, #0284c7, #38bdf8); border: none; color: white; font-size: 1.1rem; font-weight: 900; padding: 15px; border-radius: 50px; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4); margin-top: 10px; font-family: 'Arial Black', sans-serif; }
-        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6); }
-        .flash-box { background: #e11d48; color: white; padding: 12px; border-radius: 12px; font-weight: bold; font-family: sans-serif; font-size: 0.85rem; margin-bottom: 20px; }
-        .toggle-text { font-family: sans-serif; font-size: 0.85rem; color: #38bdf8; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 20px; cursor: pointer; }
+        .champions-logo-area {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px auto;
+            border: 2px solid #38bdf8;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+        .champions-logo-area span { color: #38bdf8; font-size: 1.5rem; font-weight: bold; }
+        .title-login { font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin: 0 0 8px 0; color: #ffffff; }
+        .subtitle-login { font-size: 0.85rem; color: #64748b; margin: 0 0 35px 0; font-weight: 500; letter-spacing: 0.5px; }
+        .form-group { margin-bottom: 25px; text-align: left; }
+        .label-form { display: block; font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px; }
+        .input-form { width: 100%; background: rgba(2, 6, 23, 0.8); color: #fff; border: 1px solid #334155; padding: 14px 16px; border-radius: 12px; font-size: 0.95rem; outline: none; box-sizing: border-box; transition: 0.2s; }
+        .input-form:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); }
+        .btn-submit { background: #ffffff; border: none; color: #020617; font-size: 0.95rem; font-weight: 700; padding: 15px; border-radius: 12px; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.2s; margin-top: 10px; }
+        .btn-submit:hover { background: #38bdf8; color: #ffffff; transform: translateY(-1px); box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2); }
+        .flash-box { background: rgba(225, 29, 72, 0.15); color: #fda4af; border: 1px solid rgba(225, 29, 72, 0.3); padding: 12px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 25px; font-weight: 500; }
+        .toggle-text { font-size: 0.85rem; color: #38bdf8; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px; cursor: pointer; transition: 0.2s; }
+        .toggle-text:hover { color: #7dd3fc; }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <div class="champions-stars">⭐✨⭐</div>
+        <div class="champions-logo-area"><span>★</span></div>
         <h1 class="title-login">ARENA CHAMPIONS</h1>
+        <p class="subtitle-login">PLATAFORMA DE GESTIÓN DE PRONÓSTICOS</p>
 
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -57,36 +72,36 @@
         <div id="box-login">
             <form action="/login" method="POST">
                 <div class="form-group">
-                    <label class="label-form">📧 Correo Electrónico:</label>
-                    <input type="email" name="email" class="input-form" placeholder="ejemplo@correo.com" required>
+                    <label class="label-form">Correo Electrónico</label>
+                    <input type="email" name="email" class="input-form" placeholder="nombre@correo.com" required>
                 </div>
                 <div class="form-group">
-                    <label class="label-form">🔒 Contraseña de Acceso:</label>
-                    <input type="password" name="clave" class="input-form" placeholder="•••••" required>
+                    <label class="label-form">Contraseña de Acceso</label>
+                    <input type="password" name="clave" class="input-form" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn-submit">INGRESAR A LA ARENA</button>
+                <button type="submit" class="btn-submit">Iniciar Sesión</button>
             </form>
-            <span class="toggle-text" onclick="toggleForm('registro')">¿No tienes cuenta? Regístrate aquí</span>
+            <span class="toggle-text" onclick="toggleForm('registro')">Crear una cuenta nueva</span>
         </div>
 
-        <!-- FORMULARIO DE REGISTRO NUEVO -->
+        <!-- FORMULARIO DE REGISTRO -->
         <div id="box-registro" style="display: none;">
             <form action="/registrar" method="POST">
                 <div class="form-group">
-                    <label class="label-form">👤 Nombre o Apodo:</label>
-                    <input type="text" name="nombre" class="input-form" placeholder="Tu Nombre" required>
+                    <label class="label-form">Nombre o Apodo</label>
+                    <input type="text" name="nombre" class="input-form" placeholder="Tu Apodo" required>
                 </div>
                 <div class="form-group">
-                    <label class="label-form">📧 Correo Electrónico:</label>
-                    <input type="email" name="email" class="input-form" placeholder="ejemplo@correo.com" required>
+                    <label class="label-form">Correo Electrónico</label>
+                    <input type="email" name="email" class="input-form" placeholder="nombre@correo.com" required>
                 </div>
                 <div class="form-group">
-                    <label class="label-form">🔒 Elige una Contraseña:</label>
-                    <input type="password" name="clave" class="input-form" placeholder="•••••" required>
+                    <label class="label-form">Contraseña</label>
+                    <input type="password" name="clave" class="input-form" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn-submit" style="background: linear-gradient(90deg, #10b981, #059669);">CREAR CUENTA</button>
+                <button type="submit" class="btn-submit" style="background: #38bdf8; color: #ffffff;">Registrarse</button>
             </form>
-            <span class="toggle-text" style="color:#10b981;" onclick="toggleForm('login')">¿Ya tienes cuenta? Inicia sesión</span>
+            <span class="toggle-text" style="color: #94a3b8;" onclick="toggleForm('login')">Ya tengo cuenta, iniciar sesión</span>
         </div>
     </div>
 
