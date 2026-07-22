@@ -62,11 +62,11 @@
             {% if messages %}
                 {% for m in messages %}
                     <div class="flash-box">⚠️ {{ m }}</div>
-                Prefix{% endfor %}
+                {% endfor %}
             {% endif %}
         {% endwith %}
 
-        <!-- FORMULARIO DE INICIO DE SESIÓN DE UNA SOLA RUTA -->
+        <!-- FORMULARIO DE INICIO DE SESIÓN CORREGIDO -->
         <div id="box-login">
             <form action="/login" method="POST">
                 <div class="form-group">
