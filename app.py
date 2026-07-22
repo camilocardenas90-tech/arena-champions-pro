@@ -6,10 +6,12 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "CLAVE_SECRETA_CHAMPIONS_2026")
 
+# Conexión automática adaptable para la base de datos en Railway
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///arena_champions.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+# ================= MODELOS DE LA BASE DE DATOS OREJONA =================
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(80), nullable=False)
@@ -19,7 +21,7 @@ class Usuario(db.Model):
     exactos_semana = db.Column(db.Integer, default=0)
     puntos_general = db.Column(db.Integer, default=0)
     exactos_general = db.Column(db.Integer, default=0)
-    pago_jornada_actual = db.Column(db.Boolean, default=True) # Liberado por defecto para la maqueta
+    pago_jornada_actual = db.Column(db.Boolean, default=True) # Abierto para la maqueta
     es_comisionado = db.Column(db.Boolean, default=False)
 
 class PartidoChampions(db.Model):
@@ -42,10 +44,19 @@ class ApuestaChampions(db.Model):
     pred_goles_l = db.Column(db.Integer, nullable=False)
     pred_goles_v = db.Column(db.Integer, nullable=False)
     pred_penales = db.Column(db.String(100), default="")
-with app.app_context():
+
+# ================= INICIALIZACIÓN AUTOMÁTICA SEGURA DE LA ARENA =================
+@app.before_request
+def inicializar_base_datos_segura():
     db.create_all()
     if not Usuario.query.filter_by(email="admin@champions.cl").first():
-        admin = Usuario(nombre="K-milo", email="admin@champions.cl", clave="champions2026", es_comisionado=True, pago_jornada_actual=True)
+        admin = Usuario(
+            nombre="K-milo", 
+            email="admin@champions.cl", 
+            clave="champions2026", 
+            es_comisionado=True, 
+            pago_jornada_actual=True
+        )
         db.session.add(admin)
         db.session.commit()
 
@@ -60,9 +71,11 @@ def registrar():
     nombre = request.form['nombre']
     email = request.form['email']
     clave = request.form['clave']
+    
     if Usuario.query.filter_by(email=email).first():
         flash("Este correo electrónico ya está registrado.")
         return redirect('/')
+        
     nuevo_user = Usuario(nombre=nombre, email=email, clave=clave, pago_jornada_actual=True)
     db.session.add(nuevo_user)
     db.session.commit()
@@ -74,6 +87,7 @@ def login():
     email = request.form['email']
     clave = request.form['clave']
     user = Usuario.query.filter_by(email=email, clave=clave).first()
+    
     if user:
         session['user_id'] = user.id
         session['user_nombre'] = user.nombre
@@ -86,6 +100,7 @@ def login():
 def logout():
     session.clear()
     return redirect('/')
+
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' not in session:
@@ -95,7 +110,6 @@ def dashboard():
     ranking_semana = Usuario.query.order_by(Usuario.puntos_semana.desc(), Usuario.exactos_semana.desc()).all()
     ranking_general = Usuario.query.order_by(Usuario.puntos_general.desc(), Usuario.exactos_general.desc()).all()
     
-    # Simulación estética del pozo para la maqueta visual sin pasarela activa por ahora
     premio_80 = 0
     
     apuestas_user = ApuestaChampions.query.filter_by(usuario_id=usuario_actual.id).all()
