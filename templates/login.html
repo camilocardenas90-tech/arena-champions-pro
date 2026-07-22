@@ -6,7 +6,6 @@
     <title>ARENA CHAMPIONS PRO - ACCESO ELITE</title>
     <style>
         body { 
-            /* Fondo oficial: El cielo estrellado característico de las noches de la UEFA */
             background-image: linear-gradient(rgba(5, 10, 26, 0.85), rgba(2, 4, 15, 0.95)), url('https://unsplash.com');
             background-size: cover;
             background-position: center;
@@ -46,11 +45,8 @@
         .label-form { display: block; font-size: 0.7rem; font-weight: 700; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px; }
         .input-form { width: 100%; background: rgba(1, 3, 15, 0.85); color: #fff; border: 1px solid #1e293b; padding: 14px 16px; border-radius: 12px; font-size: 0.95rem; outline: none; box-sizing: border-box; transition: 0.2s; font-family: sans-serif; }
         .input-form:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); }
-        
-        /* Botón estilo UEFA Premium */
         .btn-submit { background: linear-gradient(90deg, #0284c7, #0369a1); border: 1px solid #38bdf8; color: #ffffff; font-size: 0.95rem; font-weight: 700; padding: 15px; border-radius: 12px; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.2s; margin-top: 5px; font-family: 'Arial Black', sans-serif; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3); }
         .btn-submit:hover { background: #ffffff; color: #020617; border-color: #ffffff; transform: translateY(-1px); box-shadow: 0 12px 25px rgba(255, 255, 255, 0.2); }
-        
         .flash-box { background: rgba(225, 29, 72, 0.15); color: #fda4af; border: 1px solid rgba(225, 29, 72, 0.3); padding: 12px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 25px; font-weight: 500; font-family: sans-serif; }
         .toggle-text { font-size: 0.8rem; color: #94a3b8; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px; cursor: pointer; transition: 0.2s; font-family: sans-serif; }
         .toggle-text:hover { color: #38bdf8; }
@@ -58,9 +54,7 @@
 </head>
 <body>
     <div class="login-card">
-        <!-- Imagen oficial de la mítica copa Orejona de la UEFA -->
         <img src="https://imgur.com" class="champions-logo" alt="UEFA Champions League Trophy">
-        
         <h1 class="title-login">ARENA CHAMPIONS</h1>
         <p class="subtitle-login">GENTLEMEN, START YOUR ENGINES</p>
 
@@ -68,11 +62,11 @@
             {% if messages %}
                 {% for m in messages %}
                     <div class="flash-box">⚠️ {{ m }}</div>
-                {% endfor %}
+                Prefix{% endfor %}
             {% endif %}
         {% endwith %}
 
-        <!-- FORMULARIO DE INICIO DE SESIÓN CORREGIDO SIN DOBLE BARRA -->
+        <!-- FORMULARIO DE INICIO DE SESIÓN DE UNA SOLA RUTA -->
         <div id="box-login">
             <form action="/login" method="POST">
                 <div class="form-group">
@@ -85,7 +79,7 @@
                 </div>
                 <button type="submit" class="btn-submit">Ingresar a la Arena</button>
             </form>
-            <span class="toggle-text" onclick="toggleForm('registro')">¿No tienes cuenta? Regístrate aquí</span>
+            <span class="toggle-text" onclick="cambiarVista('registro')">¿No tienes cuenta? Regístrate aquí</span>
         </div>
 
         <!-- FORMULARIO DE REGISTRO -->
@@ -105,15 +99,15 @@
                 </div>
                 <button type="submit" class="btn-submit" style="background: #38bdf8; border-color: #38bdf8; color: #020617;">Crear Cuenta</button>
             </form>
-            <span class="toggle-text" onclick="toggleForm('login')">Ya tengo cuenta, iniciar sesión</span>
+            <span class="toggle-text" onclick="cambiarVista('login')">Ya tengo cuenta, iniciar sesión</span>
         </div>
     </div>
 
     <script>
-        function toggleForm(vista) {
+        function cambiarVista(pantalla) {
             var boxLogin = document.getElementById("box-login");
             var boxRegistro = document.getElementById("box-registro");
-            if (vista === 'registro') {
+            if (pantalla === 'registro') {
                 boxLogin.style.display = "none";
                 boxRegistro.style.display = "block";
             } else {
