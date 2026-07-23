@@ -14,8 +14,9 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: url("{{ url_for('static', filename='fondo_dashboard.png') }}?v=1") no-repeat center top fixed;
-            background-size: cover; /* Adaptabilidad responsive para PC y Celular */
+            /* TRUCO MAESTRO: El ?v=2 obliga a Railway a actualizar el HTML por completo */
+            background: url("{{ url_for('static', filename='fondo_dashboard.png') }}?v=2") no-repeat center top fixed;
+            background-size: cover; 
             min-height: 100vh;
             color: #ffffff;
             position: relative;
@@ -34,7 +35,6 @@
             z-index: 1;
         }
 
-        /* Contenedor Principal Adaptable */
         .dashboard-container {
             position: relative;
             z-index: 2;
@@ -44,7 +44,6 @@
             padding: 30px 20px;
         }
 
-        /* Encabezado Principal */
         .main-header {
             text-align: center;
             margin-bottom: 30px;
@@ -68,7 +67,6 @@
             font-weight: 600;
         }
 
-        /* Diseño de Columnas */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -81,7 +79,6 @@
             }
         }
 
-        /* Tarjetas con Efecto Cristal (Glassmorphism) */
         .glass-card {
             background: rgba(10, 21, 54, 0.45);
             backdrop-filter: blur(25px);
@@ -93,7 +90,6 @@
             margin-bottom: 25px;
         }
 
-        /* Módulo del Pozo Limpio */
         .pozo-box {
             text-align: center;
             border: 1px solid rgba(56, 189, 248, 0.2);
@@ -113,12 +109,11 @@
         .pozo-monto {
             font-size: 2.4rem;
             font-weight: 700;
-            color: #10b981; /* Verde neón limpio para el dinero */
+            color: #10b981; 
             text-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* Sección de Partidos y Apuestas */
         .seccion-titulo {
             font-family: 'Cinzel', serif;
             font-size: 1.1rem;
@@ -130,7 +125,7 @@
             color: #f1f5f9;
         }
 
-        .partido-tarjeta {
+        .partio-tarjeta {
             background: rgba(15, 23, 42, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px;
@@ -139,12 +134,11 @@
             transition: all 0.3s ease;
         }
 
-        .partido-tarjeta:hover {
+        .partio-tarjeta:hover {
             border-color: rgba(56, 189, 248, 0.3);
             background: rgba(15, 23, 42, 0.6);
         }
 
-        /* Diseño de Tablas Premium */
         .tabla-champions {
             width: 100%;
             border-collapse: collapse;
@@ -171,12 +165,10 @@
             border-bottom: none;
         }
 
-        /* Indicadores de podio metalizados */
-        .podio-1 { color: #f59e0b; font-weight: bold; } /* Oro */
-        .podio-2 { color: #cbd5e1; font-weight: bold; } /* Plata */
-        .podio-3 { color: #b45309; font-weight: bold; } /* Bronce */
+        .podio-1 { color: #f59e0b; font-weight: bold; } 
+        .podio-2 { color: #cbd5e1; font-weight: bold; } 
+        .podio-3 { color: #b45309; font-weight: bold; } 
 
-        /* Estilos de Botones Modificados */
         .btn-panel-supremo {
             display: block;
             width: 100%;
@@ -200,7 +192,7 @@
         .btn-panel-supremo:hover {
             transform: translateY(-1px);
             background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
-            box-shadow: 0 6px 20px rgba(217, 119, 6 0.4);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
         }
 
         .btn-salir {
@@ -228,7 +220,6 @@
             box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
         }
 
-        /* Botón de Música Flotante */
         .audio-control-btn {
             position: fixed;
             bottom: 25px;
@@ -257,15 +248,13 @@
 </head>
 <body>
 
-    <!-- CONTROL DE AUDIO IDÉNTICO AL LOGIN -->
     <button id="musicBtn" class="audio-control-btn" onclick="toggleMusic()">🔊</button>
     <audio id="championsHimno" loop>
-        <source src="{{ url_for('static', filename='himno.mp3') }}?v=1" type="audio/mpeg">
+        <source src="{{ url_for('static', filename='himno.mp3') }}?v=2" type="audio/mpeg">
     </audio>
 
     <div class="dashboard-container">
         
-        <!-- ENCABEZADO DE LA ARENA -->
         <header class="main-header">
             <h1>Arena Champions Pro</h1>
             <p>Hola, {{ usuario_actual.nombre }} — Panel General</p>
@@ -273,16 +262,13 @@
 
         <div class="dashboard-grid">
             
-            <!-- COLUMNA IZQUIERDA: POZO Y CARTELERA DE PARTIDOS -->
             <div class="col-izq">
                 
-                <!-- MONITOREO DEL POZO REDISEÑADO -->
                 <div class="glass-card pozo-box">
                     <h2>Pozo Acumulado</h2>
                     <div class="pozo-monto">${{ premio_80 }} CLP</div>
                 </div>
 
-                <!-- CARTELERA DE PARTIDOS -->
                 <div class="glass-card">
                     <h3 class="seccion-titulo">Cartelera de Partidos</h3>
                     
@@ -294,9 +280,7 @@
                     {% endif %}
 
                     {% for p in partidos %}
-                    <div class="partido-tarjeta">
-                        <!-- Aquí va la estructura de tu bucle original de partidos de tu PDF -->
-                        <!-- Mantenemos intacta la lógica para cuando insertes datos -->
+                    <div class="partio-tarjeta">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <span>{{ p.club_local }} vs {{ p.club_visita }}</span>
                             <span style="font-size:0.8rem; color:#38bdf8;">{{ p.instancia }}</span>
@@ -307,10 +291,8 @@
 
             </div>
 
-            <!-- COLUMNA DERECHA: RENDIMIENTO SEMANAL E HISTÓRICO -->
             <div class="col-der">
                 
-                <!-- TABLA 1: JORNADA ACTUAL -->
                 <div class="glass-card">
                     <h3 class="seccion-titulo">🏆 Jornada Actual</h3>
                     <table class="tabla-champions">
@@ -341,7 +323,6 @@
                     </table>
                 </div>
 
-                <!-- TABLA 2: HISTÓRICO DE GANADORES ANTERIORES (MAQUETA) -->
                 <div class="glass-card">
                     <h3 class="seccion-titulo">🏅 Ganadores Anteriores</h3>
                     <table class="tabla-champions">
@@ -353,7 +334,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Datos preliminares simulados para la maqueta visual -->
                             <tr>
                                 <td style="color: #94a3b8;">Jornada 1 - PlayOffs</td>
                                 <td style="font-weight: 600;">K-milo 👑</td>
@@ -368,7 +348,6 @@
                     </table>
                 </div>
 
-                <!-- BOTONERA DE MANDO -->
                 {% if usuario_actual.es_comisionado %}
                     <a href="{{ url_for('admin_control_total') }}" class="btn-panel-supremo">⚙️ Panel de Control Supremo</a>
                 {% endif %}
@@ -380,7 +359,6 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE AUDIO COMPARTIDO -->
     <script>
         const audio = document.getElementById('championsHimno');
         const btn = document.getElementById('musicBtn');
