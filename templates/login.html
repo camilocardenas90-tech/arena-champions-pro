@@ -14,8 +14,9 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: url("{{ url_for('static', filename='fondo.png') }}") no-repeat center top fixed;
-            background-size: cover;
+            /* Se cambia a center center y fijado absoluto */
+            background: url("{{ url_for('static', filename='fondo.png') }}") no-repeat center center fixed;
+            background-size: 100% 100%; /* FUERZA A LA IMAGEN A MOSTRARSE COMPLETA EN LA PANTALLA */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -60,7 +61,6 @@
             margin-bottom: 30px;
         }
 
-        /* DISEÑO TIPOGRÁFICO PREMIUM (REEMPLAZA AL LOGO ROTO) */
         .uefa-text-logo {
             font-family: 'Cinzel', serif;
             font-size: 0.85rem;
@@ -72,7 +72,6 @@
             font-weight: 700;
         }
 
-        /* CONTENEDOR DE LA COPA SIN FONDO NEGRO */
         .trofeo-box {
             width: 100px;
             height: 100px;
@@ -88,7 +87,6 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            /* TRUCO MAESTRO: Remueve fondos negros puros automáticamente */
             mix-blend-mode: screen; 
             filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5)) brightness(1.1);
         }
@@ -102,14 +100,7 @@
             font-weight: 700;
         }
 
-        .brand-header p {
-            font-size: 0.75rem;
-            color: #38bdf8;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 4px;
-            font-weight: 600;
-        }
+        /* TEXTO ELIMINADO DESDE AQUÍ */
 
         .form-group {
             margin-bottom: 22px;
@@ -207,15 +198,12 @@
 
         <div class="login-card">
             <div class="brand-header">
-                <!-- REEMPLAZO PREMIUM DEL LOGO ROTO -->
                 <div class="uefa-text-logo">CHAMPIONS LEAGUE</div>
                 
-                <!-- COPA TRANSPARENTE MEDIANTE MIX-BLEND -->
                 <div class="trofeo-box">
                     <img src="{{ url_for('static', filename='orejona.png') }}" alt="La Orejona" class="trofeo-orejona">
                 </div>
                 <h1>Arena Pro</h1>
-                <p>Torneo de Oficina</p>
             </div>
 
             <div id="box-login">
