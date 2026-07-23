@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: url("{{ url_for('static', filename='fondo.png') }}?v=3") no-repeat center center fixed;
+            background: url("{{ url_for('static', filename='fondo.png') }}?v=4") no-repeat center center fixed;
             background-size: 100% 100%; 
             min-height: 100vh;
             display: flex;
@@ -212,8 +212,9 @@
 
     <button id="musicBtn" class="audio-control-btn" onclick="toggleMusic()">🔊</button>
     
+    <!-- ENLACE DE AUDIO ACTUALIZADO PARA CARGAR TU ARCHIVO LOCAL -->
     <audio id="championsHimno" loop>
-        <source src="https://soundboard.com" type="audio/mpeg">
+        <source src="{{ url_for('static', filename='himno.mp3') }}?v=1" type="audio/mpeg">
     </audio>
 
     <div class="login-container">
@@ -229,7 +230,7 @@
             <div class="brand-header">
                 <div class="uefa-text-logo">CHAMPIONS LEAGUE</div>
                 <div class="trofeo-box">
-                    <img src="{{ url_for('static', filename='orejona.png') }}?v=3" alt="La Orejona" class="trofeo-orejona">
+                    <img src="{{ url_for('static', filename='orejona.png') }}?v=4" alt="La Orejona" class="trofeo-orejona">
                 </div>
                 <h1>Arena Pro</h1>
             </div>
