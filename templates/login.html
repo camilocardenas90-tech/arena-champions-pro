@@ -14,8 +14,7 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            /* TRUCO MAESTRO: El ?v=2 rompe la caché del navegador al instante */
-            background: url("{{ url_for('static', filename='fondo.png') }}?v=2") no-repeat center center fixed;
+            background: url("{{ url_for('static', filename='fondo.png') }}?v=3") no-repeat center center fixed;
             background-size: 100% 100%; 
             min-height: 100vh;
             display: flex;
@@ -181,9 +180,41 @@
             color: #fca5a5;
             margin-bottom: 20px;
         }
+
+        .audio-control-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 10;
+            background: rgba(10, 21, 54, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .audio-control-btn:hover {
+            transform: scale(1.1);
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
     </style>
 </head>
 <body>
+
+    <button id="musicBtn" class="audio-control-btn" onclick="toggleMusic()">🔊</button>
+    
+    <audio id="championsHimno" loop>
+        <source src="https://soundboard.com" type="audio/mpeg">
+    </audio>
 
     <div class="login-container">
         {% with messages = get_flashed_messages() %}
@@ -197,9 +228,8 @@
         <div class="login-card">
             <div class="brand-header">
                 <div class="uefa-text-logo">CHAMPIONS LEAGUE</div>
-                
                 <div class="trofeo-box">
-                    <img src="{{ url_for('static', filename='orejona.png') }}?v=2" alt="La Orejona" class="trofeo-orejona">
+                    <img src="{{ url_for('static', filename='orejona.png') }}?v=3" alt="La Orejona" class="trofeo-orejona">
                 </div>
                 <h1>Arena Pro</h1>
             </div>
@@ -241,6 +271,25 @@
     </div>
 
     <script>
+        const audio = document.getElementById('championsHimno');
+        const btn = document.getElementById('musicBtn');
+
+        window.addEventListener('click', () => {
+            if (audio.paused && btn.innerText === '🔊') {
+                audio.play().catch(e => console.log("Bloqueado hasta interacción."));
+            }
+        }, { once: true });
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                btn.innerText = '🔊';
+            } else {
+                audio.pause();
+                btn.innerText = '🔇';
+            }
+        }
+
         function cambiarVista(pantalla) {
             const loginBox = document.getElementById('box-login');
             const registroBox = document.getElementById('box-registro');
