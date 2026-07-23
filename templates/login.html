@@ -14,9 +14,9 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            /* Se cambia a center center y fijado absoluto */
-            background: url("{{ url_for('static', filename='fondo.png') }}") no-repeat center center fixed;
-            background-size: 100% 100%; /* FUERZA A LA IMAGEN A MOSTRARSE COMPLETA EN LA PANTALLA */
+            /* TRUCO MAESTRO: El ?v=2 rompe la caché del navegador al instante */
+            background: url("{{ url_for('static', filename='fondo.png') }}?v=2") no-repeat center center fixed;
+            background-size: 100% 100%; 
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -99,8 +99,6 @@
             text-transform: uppercase;
             font-weight: 700;
         }
-
-        /* TEXTO ELIMINADO DESDE AQUÍ */
 
         .form-group {
             margin-bottom: 22px;
@@ -201,7 +199,7 @@
                 <div class="uefa-text-logo">CHAMPIONS LEAGUE</div>
                 
                 <div class="trofeo-box">
-                    <img src="{{ url_for('static', filename='orejona.png') }}" alt="La Orejona" class="trofeo-orejona">
+                    <img src="{{ url_for('static', filename='orejona.png') }}?v=2" alt="La Orejona" class="trofeo-orejona">
                 </div>
                 <h1>Arena Pro</h1>
             </div>
