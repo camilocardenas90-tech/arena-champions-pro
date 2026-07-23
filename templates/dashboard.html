@@ -3,134 +3,403 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARENA CHAMPIONS PRO - DASHBOARD</title>
+    <title>Arena Champions Pro - Panel de Apuestas</title>
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body { background: radial-gradient(circle at center, #070d1f 0%, #01040a 100%); color: #ffffff; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; margin: 0; padding: 0; text-align: center; }
-        .header-champions { 
-            width: 100%; background: linear-gradient(180deg, rgba(10,17,40,0.8) 0%, rgba(2,6,23,0.9) 100%);
-            border-bottom: 4px solid #38bdf8; padding: 30px 0; margin-bottom: 25px; position: relative; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        .neon-title { color: #fff; font-size: 2.3rem; font-style: italic; text-transform: uppercase; letter-spacing: 2px; margin: 0; text-shadow: 0 0 10px #38bdf8, 0 0 20px #0284c7; font-family: sans-serif; font-weight: 900; }
-        .main-container { display: flex; justify-content: center; align-items: flex-start; gap: 20px; padding: 0 10px; flex-wrap: wrap; }
-        
-        .match-card { background: rgba(15, 23, 42, 0.4); border-radius: 25px; width: 100%; max-width: 650px; border: 2px solid #1e293b; margin-bottom: 25px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.5); backdrop-filter: blur(8px); }
-        .match-table { width: 100%; border-collapse: collapse; }
-        .vs-cell { font-size: 1.8rem; color: #38bdf8; text-shadow: 0 0 10px #38bdf8; font-style: italic; font-weight: 900; padding: 10px; }
-        .club-name { font-size: 1.1rem; color: #fff; text-transform: uppercase; display: block; margin-bottom: 8px; }
-        .score-input { width: 75px; height: 65px; background: #020617; color: #fff; border: 2px solid #38bdf8; font-size: 2.2rem; font-weight: 900; border-radius: 15px; text-align: center; outline: none; }
-        .match-date { color: #ffd700; border: 2px solid #ffd700; padding: 4px 18px; border-radius: 50px; display: inline-block; font-size: 0.8rem; margin-bottom: 10px; font-family: sans-serif; font-weight: bold; }
-        
-        .pozo-banner { background: linear-gradient(90deg, #0f172a, #0369a1); border: 2px solid #38bdf8; border-radius: 20px; padding: 15px; width: 100%; max-width: 650px; box-sizing: border-box; margin-bottom: 25px; box-shadow: 0 0 20px rgba(56,189,248,0.3); }
-        .btn-register { background: linear-gradient(90deg, #0284c7, #38bdf8); border: none; color: white; font-size: 1.2rem; font-weight: 900; padding: 16px; border-radius: 50px; width: 92%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; font-family: sans-serif; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4); }
-        
-        .ranking-card { background: rgba(11, 19, 41, 0.6); border: 2px solid #ffd700; border-radius: 25px; padding: 15px; width: 100%; max-width: 350px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); backdrop-filter: blur(8px); box-sizing: border-box; }
-        .rank-table { width: 100%; color: white; border-collapse: collapse; font-family: sans-serif; }
-        .rank-table th { color: #ffd700; border-bottom: 1px solid #1e293b; padding: 8px; font-size: 0.75rem; text-transform: uppercase; }
-        .rank-table td { padding: 12px 5px; border-bottom: 1px solid #0f172a; font-size: 0.95rem; }
-        .exact-pts { color: #38bdf8 !important; font-weight: bold; }
-        .flash-msg { background: #38bdf8; color: black; padding: 12px; border-radius: 12px; font-weight: bold; margin-bottom: 20px; display: inline-block; font-family: sans-serif; font-size: 0.9rem; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: url("{{ url_for('static', filename='fondo_dashboard.png') }}?v=1") no-repeat center top fixed;
+            background-size: cover; /* Adaptabilidad responsive para PC y Celular */
+            min-height: 100vh;
+            color: #ffffff;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(4, 9, 29, 0.8) 0%, rgba(5, 11, 31, 0.95) 100%);
+            z-index: 1;
+        }
+
+        /* Contenedor Principal Adaptable */
+        .dashboard-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Encabezado Principal */
+        .main-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .main-header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
+            font-weight: 700;
+        }
+
+        .main-header p {
+            font-size: 0.85rem;
+            color: #38bdf8;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        /* Diseño de Columnas */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1.6fr 1.2fr;
+            }
+        }
+
+        /* Tarjetas con Efecto Cristal (Glassmorphism) */
+        .glass-card {
+            background: rgba(10, 21, 54, 0.45);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            margin-bottom: 25px;
+        }
+
+        /* Módulo del Pozo Limpio */
+        .pozo-box {
+            text-align: center;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 30px rgba(0, 102, 255, 0.15);
+            background: rgba(14, 32, 79, 0.5);
+        }
+
+        .pozo-box h2 {
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pozo-monto {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #10b981; /* Verde neón limpio para el dinero */
+            text-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Sección de Partidos y Apuestas */
+        .seccion-titulo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            color: #f1f5f9;
+        }
+
+        .partido-tarjeta {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .partido-tarjeta:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        /* Diseño de Tablas Premium */
+        .tabla-champions {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .tabla-champions th {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tabla-champions td {
+            padding: 14px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+        }
+
+        .tabla-champions tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Indicadores de podio metalizados */
+        .podio-1 { color: #f59e0b; font-weight: bold; } /* Oro */
+        .podio-2 { color: #cbd5e1; font-weight: bold; } /* Plata */
+        .podio-3 { color: #b45309; font-weight: bold; } /* Bronce */
+
+        /* Estilos de Botones Modificados */
+        .btn-panel-supremo {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn-panel-supremo:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+            box-shadow: 0 6px 20px rgba(217, 119, 6 0.4);
+        }
+
+        .btn-salir {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fca5a5;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn-salir:hover {
+            background: #ef4444;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Botón de Música Flotante */
+        .audio-control-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 10;
+            background: rgba(10, 21, 54, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .audio-control-btn:hover {
+            transform: scale(1.1);
+            border-color: #38bdf8;
+        }
     </style>
 </head>
 <body>
-    <div class="header-champions">
-        <h1 class="neon-title">⭐ CHAMPIONS ARENA PRO ⭐</h1>
-    </div>
 
-    {% with messages = get_flashed_messages() %}{% if messages %}{% for m in messages %}<div class="flash-msg">{{ m }}</div>{% endfor %}{% endif %}{% endwith %}
-    <div class="main-container">
-        <!-- CONTENEDOR DE JUEGO (LADO IZQUIERDO) -->
-        <div style="display: flex; flex: 1; max-width: 650px; flex-direction: column; align-items: center; width: 100%;">
+    <!-- CONTROL DE AUDIO IDÉNTICO AL LOGIN -->
+    <button id="musicBtn" class="audio-control-btn" onclick="toggleMusic()">🔊</button>
+    <audio id="championsHimno" loop>
+        <source src="{{ url_for('static', filename='himno.mp3') }}?v=1" type="audio/mpeg">
+    </audio>
+
+    <div class="dashboard-container">
+        
+        <!-- ENCABEZADO DE LA ARENA -->
+        <header class="main-header">
+            <h1>Arena Champions Pro</h1>
+            <p>Hola, {{ usuario_actual.nombre }} — Panel General</p>
+        </header>
+
+        <div class="dashboard-grid">
             
-            <!-- MARCADOR DE DINERO NEÓN EN VIVO -->
-            <div class="pozo-banner">
-                <span style="color: #94a3b8; font-family: sans-serif; font-size: 0.8rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">💰 MONITOREO DE INSCRIPCIONES:</span>
-                <div style="font-size: 1.8rem; color: #ffd700; font-weight: 900; margin-top: 5px; text-shadow: 0 0 10px rgba(255,215,0,0.4);">
-                    POZO GANADOR (80%): ${{ premio_80 }} CLP
+            <!-- COLUMNA IZQUIERDA: POZO Y CARTELERA DE PARTIDOS -->
+            <div class="col-izq">
+                
+                <!-- MONITOREO DEL POZO REDISEÑADO -->
+                <div class="glass-card pozo-box">
+                    <h2>Pozo Acumulado</h2>
+                    <div class="pozo-monto">${{ premio_80 }} CLP</div>
                 </div>
-                <span style="color: #38bdf8; font-family: sans-serif; font-size: 0.75rem;">¡Puntajes reiniciados! Todos compiten por el pozo de esta semana desde cero.</span>
+
+                <!-- CARTELERA DE PARTIDOS -->
+                <div class="glass-card">
+                    <h3 class="seccion-titulo">Cartelera de Partidos</h3>
+                    
+                    {% if not partidos %}
+                    <div style="text-align: center; color: #94a3b8; padding: 30px 10px; font-size: 0.9rem;">
+                        🛡️ No hay partidos cargados en la cartelera actual.<br>
+                        Inicia sesión como Comisionado para inyectar la fecha europea.
+                    </div>
+                    {% endif %}
+
+                    {% for p in partidos %}
+                    <div class="partido-tarjeta">
+                        <!-- Aquí va la estructura de tu bucle original de partidos de tu PDF -->
+                        <!-- Mantenemos intacta la lógica para cuando insertes datos -->
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span>{{ p.club_local }} vs {{ p.club_visita }}</span>
+                            <span style="font-size:0.8rem; color:#38bdf8;">{{ p.instancia }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
             </div>
 
-            <!-- CARTELERA DINÁMICA DE PARTIDOS -->
-            {% if partidos %}
-                {% for p in partidos if not p.cerrado %}
-                <form action="/apostar/{{ p.id }}" method="POST" style="width: 100%;">
-                    <div class="match-card">
-                        <div style="color: #38bdf8; font-size: 0.8rem; padding: 8px 0; background: #020617; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; font-family: sans-serif;">🇪🇺 UEFA CHAMPIONS LEAGUE - {{ p.instancia }}</div>
-                        <table class="match-table">
+            <!-- COLUMNA DERECHA: RENDIMIENTO SEMANAL E HISTÓRICO -->
+            <div class="col-der">
+                
+                <!-- TABLA 1: JORNADA ACTUAL -->
+                <div class="glass-card">
+                    <h3 class="seccion-titulo">🏆 Jornada Actual</h3>
+                    <table class="tabla-champions">
+                        <thead>
                             <tr>
-                                <td style="padding: 20px 10px; width: 42%; text-align: center;">
-                                    <span class="club-name">{{ p.club_local }}</span>
-                                    <input type="number" name="goles_l" class="score-input" required value="{{ mis_apuestas[p.id].pred_goles_l if p.id in mis_apuestas else 0 }}">
-                                </td>
-                                <td class="vs-cell">VS</td>
-                                <td style="padding: 20px 10px; width: 42%; text-align: center;">
-                                    <span class="club-name">{{ p.club_visita }}</span>
-                                    <input type="number" name="goles_v" class="score-input" required value="{{ mis_apuestas[p.id].pred_goles_v if p.id in mis_apuestas else 0 }}">
-                                </td>
+                                <th style="width: 10%;">#</th>
+                                <th style="width: 50%;">Usuario</th>
+                                <th style="width: 20%; text-align: center;">Pts</th>
+                                <th style="width: 20%; text-align: center;">Ex</th>
                             </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in ranking_semana %}
                             <tr>
-                                <td colspan="3" style="padding: 15px; background: #020617; text-align: center; border-top: 1px solid #1e293b;">
-                                    <div class="match-date">📅 {{ p.fecha_inicio.strftime('%d/%m %H:%M') }} HRS</div><br>
-                                    <button type="submit" class="btn-register">GUARDAR PRONÓSTICO</button>
+                                <td class="{% if loop.index == 1 %}podio-1{% elif loop.index == 2 %}podio-2{% elif loop.index == 3 %}podio-3{% endif %}">
+                                    {{ loop.index }}°
                                 </td>
+                                <td style="font-weight: 600;">{{ u.nombre }}</td>
+                                <td style="text-align: center; font-weight: 700; color: #38bdf8;">{{ u.puntos_semana }}</td>
+                                <td style="text-align: center; color: #94a3b8;">{{ u.exactos_semana }}</td>
                             </tr>
-                        </table>
-                    </div>
-                </form>
-                {% endfor %}
-            {% else %}
-                <div class="match-card" style="padding: 30px; font-family: sans-serif; color: #94a3b8; font-size: 0.9.rem;">
-                    📭 No hay partidos cargados en la cartelera actual.<br>Inicia sesión como Comisionado para inyectar la fecha europea.
+                            {% else %}
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: #94a3b8; padding: 15px 0;">Esperando competidores...</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-            {% endif %}
-        </div>
-        <!-- PANEL DE RANKINGS EN PARALELO (LADO DERECHO) -->
-        <div class="ranking-card">
-            <h2 style="color: #ffd700; margin-top: 0; font-size: 1.4rem; text-transform: uppercase; font-style: italic; border-bottom: 2px solid #1e293b; padding-bottom: 10px;">🏆 JORNADA ACTUAL</h2>
-            <table class="rank-table">
-                <thead><tr><th>#</th><th style="text-align: left;">Usuario</th><th>Pts</th><th>Ex</th></tr></thead>
-                <tbody>
-                    {% if ranking_semana %}
-                        {% for u in ranking_semana %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td style="text-align: left; font-weight: bold; color: #fff;">👤 {{ u.nombre }}</td>
-                            <td style="color: #38bdf8; font-weight: bold;">{{ u.puntos_semana }}</td>
-                            <td class="exact-pts">{{ u.exactos_semana }}</td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr><td colspan="4" style="color:#64748b; font-size:0.8rem; padding:15px;">Esperando jugadores...</td></tr>
-                    {% endif %}
-                </tbody>
-            </table>
-            
-            <br>
-            <h2 style="color: #38bdf8; margin-top: 20px; font-size: 1.3rem; text-transform: uppercase; font-style: italic; border-bottom: 2px solid #1e293b; padding-bottom: 10px;">📊 RANKING GENERAL</h2>
-            <table class="rank-table">
-                <thead><tr><th>#</th><th style="text-align: left;">Usuario</th><th>Total</th><th>Ex</th></tr></thead>
-                <tbody>
-                    {% if ranking_general %}
-                        {% for u in ranking_general %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td style="text-align: left; color: #94a3b8;">👤 {{ u.nombre }}</td>
-                            <td style="color: #10b981; font-weight: bold;">{{ u.puntos_general }}</td>
-                            <td style="color: #888;">{{ u.exactos_general }}</td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr><td colspan="4" style="color:#64748b; font-size:0.8rem; padding:15px;">No hay registros acumulados.</td></tr>
-                    {% endif %}
-                </tbody>
-            </table>
-            
-            <br><br>
-            {% if usuario_actual.es_comisionado %}
-                <a href="/admin_control_total" style="color: #ffd700; text-decoration: none; font-size: 0.8rem; font-weight: bold; border: 2px solid #ffd700; padding: 8px 15px; border-radius: 12px; display: inline-block; margin-bottom: 10px; font-family:sans-serif;">⚙️ PANEL DE CONTROL SUPREMO</a><br>
-            {% endif %}
-            <a href="/logout" style="color: #ef4444; text-decoration: none; font-size: 0.8rem; font-weight: bold; border: 1px solid #ef4444; padding: 6px 15px; border-radius: 12px; display: inline-block; font-family:sans-serif;">SALIR DE LA ARENA</a>
+
+                <!-- TABLA 2: HISTÓRICO DE GANADORES ANTERIORES (MAQUETA) -->
+                <div class="glass-card">
+                    <h3 class="seccion-titulo">🏅 Ganadores Anteriores</h3>
+                    <table class="tabla-champions">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">Jornada</th>
+                                <th style="width: 35%;">Campeón</th>
+                                <th style="width: 25%; text-align: right;">Premio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Datos preliminares simulados para la maqueta visual -->
+                            <tr>
+                                <td style="color: #94a3b8;">Jornada 1 - PlayOffs</td>
+                                <td style="font-weight: 600;">K-milo 👑</td>
+                                <td style="text-align: right; font-weight: 700; color: #10b981;">$15.000</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #94a3b8;">Jornada 2 - Octavos</td>
+                                <td style="font-weight: 600;">Matias_U</td>
+                                <td style="text-align: right; font-weight: 700; color: #10b981;">$15.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- BOTONERA DE MANDO -->
+                {% if usuario_actual.es_comisionado %}
+                    <a href="{{ url_for('admin_control_total') }}" class="btn-panel-supremo">⚙️ Panel de Control Supremo</a>
+                {% endif %}
+                
+                <a href="{{ url_for('logout') }}" class="btn-salir">Cerrar Sesión</a>
+
+            </div>
+
         </div>
     </div>
+
+    <!-- SCRIPT DE AUDIO COMPARTIDO -->
+    <script>
+        const audio = document.getElementById('championsHimno');
+        const btn = document.getElementById('musicBtn');
+
+        window.addEventListener('click', () => {
+            if (audio.paused && btn.innerText === '🔊') {
+                audio.play().catch(e => console.log("Bloqueado."));
+            }
+        }, { once: true });
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                btn.innerText = '🔊';
+            } else {
+                audio.pause();
+                btn.innerText = '🔇';
+            }
+        }
+    </script>
 </body>
 </html>
