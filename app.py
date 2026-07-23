@@ -3,13 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 
+# Inicialización explícita y directa de la aplicación Flask
 app = Flask(__name__)
+
+# Configuración obligatoria de seguridad para producción
 app.secret_key = os.environ.get("SECRET_KEY", "CLAVE_SECRETA_CHAMPIONS_2026")
 
-# EL CAMBIO ESTRATÉGICO: Almacenamiento en memoria RAM ultra rápida
-# Evita bloqueos de archivos físicos dinámicos en los servidores de Railway
+# Mantenemos tu estrategia de base de datos en memoria RAM temporal
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Vinculación del ORM de base de datos a la instancia del servidor
 db = SQLAlchemy(app)
 
 # ================= MODELOS DE LA BASE DE DATOS OREJONA =================
@@ -22,7 +26,7 @@ class Usuario(db.Model):
     exactos_semana = db.Column(db.Integer, default=0)
     puntos_general = db.Column(db.Integer, default=0)
     exactos_general = db.Column(db.Integer, default=0)
-    pago_jornada_actual = db.Column(db.Boolean, default=True) # Abierto para la maqueta
+    pago_jornada_actual = db.Column(db.Boolean, default=True)
     es_comisionado = db.Column(db.Boolean, default=False)
 
 class PartidoChampions(db.Model):
@@ -49,10 +53,10 @@ class ApuestaChampions(db.Model):
 # ================= INICIALIZACIÓN INDESTRUCTIBLE DE LA ARENA =================
 @app.before_request
 def inicializar_base_datos_segura():
-    # Crea las tablas SQL al vuelo en la memoria RAM en cada clic
+    # Creación automática del esquema relacional en memoria
     db.create_all()
     
-    # Inyector Maestro: Asegura que tu cuenta de Comisionado exista siempre
+    # Inyector Maestro: Verificación de la cuenta raíz del Comisionado
     admin_existe = Usuario.query.filter_by(email="admin@champions.cl").first()
     if not admin_existe:
         admin = Usuario(
@@ -65,8 +69,11 @@ def inicializar_base_datos_segura():
         db.session.add(admin)
         db.session.commit()
 
+# ================= ENRUTAMIENTO BASE DE LA APLICACIÓN =================
+
 @app.route('/')
 def index():
+    # Si el usuario ya cuenta con token de sesión activo, ingresa directo al tablero
     if 'user_id' in session:
         return redirect(url_for('dashboard'))
     return render_template('login.html')
@@ -113,7 +120,7 @@ def dashboard():
     
     usuario_actual = Usuario.query.get(session['user_id'])
     
-    # Parche anti-bucles de sesión: si las cookies persisten pero el usuario fue purgado
+    # Parche de seguridad para cookies corruptas o purgas de memoria
     if not usuario_actual:
         session.clear()
         return redirect(url_for('index'))
@@ -190,5 +197,7 @@ def admin_reiniciar_semana_manual():
     flash("Arena purificada con éxito. ¡Tablero en cero para la nueva Jornada!")
     return redirect(url_for('admin_control_total'))
 
+# Configuración explícita del punto de entrada para producción e intérprete local
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
