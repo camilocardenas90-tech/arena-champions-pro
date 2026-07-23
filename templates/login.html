@@ -15,7 +15,7 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background: url("{{ url_for('static', filename='fondo.png') }}") no-repeat center top fixed;
-            background-size: cover; /* Ajuste adaptático inteligente para el estadio */
+            background-size: cover;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -32,7 +32,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, rgba(5, 10, 26, 0.75) 0%, rgba(9, 21, 54, 0.9) 100%);
+            background: linear-gradient(180deg, rgba(4, 9, 29, 0.75) 0%, rgba(5, 11, 31, 0.95) 100%);
             z-index: 1;
         }
 
@@ -45,79 +45,82 @@
         }
 
         .login-card {
-            background: rgba(10, 20, 50, 0.55); /* Fondo un poco más oscuro para contrastar si la copa tiene fondo blanco */
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(10, 21, 54, 0.45);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 35px 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 
-                        0 0 40px rgba(0, 102, 255, 0.15);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 
+                        0 0 50px rgba(0, 102, 255, 0.2);
             text-align: center;
         }
 
         .brand-header {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
-        /* Contenedor adaptativo para el logo de la UEFA */
-        .logo-uefa {
-            width: 100%;
-            max-width: 220px;
-            height: auto;
+        /* DISEÑO TIPOGRÁFICO PREMIUM (REEMPLAZA AL LOGO ROTO) */
+        .uefa-text-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 7px;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
             margin-bottom: 15px;
-            display: inline-block;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            font-weight: 700;
         }
 
-        /* Estilo para la orejona con máscara circular para ocultar imperfecciones de fondo */
+        /* CONTENEDOR DE LA COPA SIN FONDO NEGRO */
         .trofeo-box {
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 12px auto;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px auto;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.2) 0%, rgba(255,255,255,0) 70%);
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
             overflow: hidden;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
         }
 
         .trofeo-orejona {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
+            /* TRUCO MAESTRO: Remueve fondos negros puros automáticamente */
+            mix-blend-mode: screen; 
+            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5)) brightness(1.1);
         }
 
         .brand-header h1 {
             font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            letter-spacing: 3px;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
             color: #ffffff;
             text-transform: uppercase;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            font-weight: 700;
         }
 
         .brand-header p {
             font-size: 0.75rem;
             color: #38bdf8;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             margin-top: 4px;
             font-weight: 600;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             text-align: left;
         }
 
         .form-group label {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             margin-bottom: 8px;
             color: #94a3b8;
             text-transform: uppercase;
@@ -125,9 +128,9 @@
 
         .input-control {
             width: 100%;
-            background: rgba(5, 10, 25, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            background: rgba(4, 9, 24, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
             padding: 14px 16px;
             color: #ffffff;
             font-family: 'Montserrat', sans-serif;
@@ -137,32 +140,33 @@
         }
 
         .input-control:focus {
-            border-color: #0284c7;
-            box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+            background: rgba(4, 9, 24, 0.95);
         }
 
         .btn-champions {
             width: 100%;
-            background: linear-gradient(135deg, #1d4ed8 0%, #0369a1 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #0284c7 100%);
             border: none;
-            border-radius: 8px;
-            padding: 15px;
+            border-radius: 10px;
+            padding: 16px;
             color: #ffffff;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         .btn-champions:hover {
             transform: translateY(-1px);
             background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 6px 25px rgba(37, 99, 235, 0.4);
         }
 
         .switch-link {
@@ -171,6 +175,7 @@
             font-size: 0.8rem;
             color: #94a3b8;
             text-decoration: none;
+            letter-spacing: 0.5px;
             transition: color 0.3s ease;
         }
 
@@ -202,10 +207,10 @@
 
         <div class="login-card">
             <div class="brand-header">
-                <!-- Se fuerza la ruta estática para logo-champions.png -->
-                <img src="{{ url_for('static', filename='logo-champions.png') }}" alt="UEFA Champions League" class="logo-uefa">
+                <!-- REEMPLAZO PREMIUM DEL LOGO ROTO -->
+                <div class="uefa-text-logo">CHAMPIONS LEAGUE</div>
                 
-                <!-- Encapsulamos la copa en un círculo elegante para estilizar su fondo -->
+                <!-- COPA TRANSPARENTE MEDIANTE MIX-BLEND -->
                 <div class="trofeo-box">
                     <img src="{{ url_for('static', filename='orejona.png') }}" alt="La Orejona" class="trofeo-orejona">
                 </div>
