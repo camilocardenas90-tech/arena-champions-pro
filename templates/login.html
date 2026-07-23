@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arena Champions Pro - UEFA Champions League</title>
-    <!-- Google Fonts para usar fuentes estilizadas y elegantes -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         * {
@@ -15,8 +14,8 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: url("{{ url_for('static', filename='fondo.png') }}") no-repeat center center fixed;
-            background-size: cover;
+            background: url("{{ url_for('static', filename='fondo.png') }}") no-repeat center top fixed;
+            background-size: cover; /* Ajuste adaptático inteligente para el estadio */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -26,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* Capa oscura superpuesta para dar mística y legibilidad */
         body::before {
             content: '';
             position: absolute;
@@ -34,7 +32,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(5, 10, 26, 0.85) 0%, rgba(9, 21, 54, 0.75) 100%);
+            background: linear-gradient(180deg, rgba(5, 10, 26, 0.75) 0%, rgba(9, 21, 54, 0.9) 100%);
             z-index: 1;
         }
 
@@ -46,60 +44,72 @@
             padding: 20px;
         }
 
-        /* Tarjeta con efecto cristal premium (Glassmorphism) */
         .login-card {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 40px 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
-                        0 0 30px rgba(0, 83, 246, 0.15);
+            background: rgba(10, 20, 50, 0.55); /* Fondo un poco más oscuro para contrastar si la copa tiene fondo blanco */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 35px 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 
+                        0 0 40px rgba(0, 102, 255, 0.15);
             text-align: center;
-            transition: all 0.4s ease;
         }
 
-        /* Encabezado con Logos Oficiales */
         .brand-header {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
+        /* Contenedor adaptativo para el logo de la UEFA */
         .logo-uefa {
-            max-width: 180px;
+            width: 100%;
+            max-width: 220px;
             height: auto;
             margin-bottom: 15px;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+            display: inline-block;
+        }
+
+        /* Estilo para la orejona con máscara circular para ocultar imperfecciones de fondo */
+        .trofeo-box {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 12px auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
         }
 
         .trofeo-orejona {
-            max-width: 75px;
-            height: auto;
-            display: block;
-            margin: 0 auto 10px auto;
-            filter: drop-shadow(0 0 15px rgba(0, 102, 255, 0.4));
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
         .brand-header h1 {
             font-family: 'Cinzel', serif;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             letter-spacing: 3px;
-            color: #f1f5f9;
+            color: #ffffff;
             text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .brand-header p {
-            font-size: 0.8rem;
-            color: #94a3b8;
+            font-size: 0.75rem;
+            color: #38bdf8;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-top: 5px;
+            margin-top: 4px;
+            font-weight: 600;
         }
 
-        /* Formulario e Inputs Modernos */
         .form-group {
-            margin-bottom: 22px;
+            margin-bottom: 20px;
             text-align: left;
         }
 
@@ -107,35 +117,33 @@
             display: block;
             font-size: 0.75rem;
             font-weight: 600;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             margin-bottom: 8px;
-            color: #cbd5e1;
+            color: #94a3b8;
             text-transform: uppercase;
         }
 
         .input-control {
             width: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(5, 10, 25, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding: 14px 16px;
             color: #ffffff;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             outline: none;
             transition: all 0.3s ease;
         }
 
         .input-control:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
-            background: rgba(15, 23, 42, 0.85);
+            border-color: #0284c7;
+            box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
         }
 
-        /* Botón de Acción Estilo Noche Europea */
         .btn-champions {
             width: 100%;
-            background: linear-gradient(135deg, #1e40af 0%, #0284c7 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #0369a1 100%);
             border: none;
             border-radius: 8px;
             padding: 15px;
@@ -146,124 +154,105 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             transition: all 0.3s ease;
             margin-top: 10px;
         }
 
         .btn-champions:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5), 
-                        0 0 15px rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
             background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
         }
 
-        .btn-champions:active {
-            transform: translateY(0);
-        }
-
-        /* Enlaces de Intercambio */
         .switch-link {
             display: inline-block;
             margin-top: 25px;
             font-size: 0.8rem;
-            color: #38bdf8;
+            color: #94a3b8;
             text-decoration: none;
-            letter-spacing: 0.5px;
             transition: color 0.3s ease;
         }
 
         .switch-link:hover {
-            color: #7dd3fc;
-            text-decoration: underline;
+            color: #38bdf8;
         }
 
-        /* Alertas Flash de Error de Flask */
         .alert-flash {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
             border-radius: 8px;
             padding: 12px;
             font-size: 0.85rem;
             color: #fca5a5;
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
         }
     </style>
 </head>
 <body>
 
     <div class="login-container">
-        
-        <!-- Mensajes de Alerta del Servidor -->
         {% with messages = get_flashed_messages() %}
           {% if messages %}
             {% for message in messages %}
-              <div class="alert-flash">
-                <span>🛡️</span> {{ message }}
-              </div>
+              <div class="alert-flash">🛡️ {{ message }}</div>
             {% endfor %}
           {% endif %}
         {% endwith %}
 
         <div class="login-card">
-            
-            <!-- Encabezado de Identidad -->
             <div class="brand-header">
+                <!-- Se fuerza la ruta estática para logo-champions.png -->
                 <img src="{{ url_for('static', filename='logo-champions.png') }}" alt="UEFA Champions League" class="logo-uefa">
-                <img src="{{ url_for('static', filename='orejona.png') }}" alt="La Orejona" class="trofeo-orejona">
+                
+                <!-- Encapsulamos la copa en un círculo elegante para estilizar su fondo -->
+                <div class="trofeo-box">
+                    <img src="{{ url_for('static', filename='orejona.png') }}" alt="La Orejona" class="trofeo-orejona">
+                </div>
                 <h1>Arena Pro</h1>
                 <p>Torneo de Oficina</p>
             </div>
 
-            <!-- BLOQUE 1: INICIAR SESIÓN -->
             <div id="box-login">
                 <form action="{{ url_for('login') }}" method="POST">
                     <div class="form-group">
-                        <label for="login-email">Correo Corporativo</label>
-                        <input type="email" id="login-email" name="email" class="input-control" placeholder="usuario@empresa.com" required>
+                        <label>Correo Corporativo</label>
+                        <input type="email" name="email" class="input-control" placeholder="usuario@empresa.com" required>
                     </div>
                     <div class="form-group">
-                        <label for="login-password">Contraseña</label>
-                        <input type="password" id="login-password" name="clave" class="input-control" placeholder="••••••••" required>
+                        <label>Contraseña</label>
+                        <input type="password" name="clave" class="input-control" placeholder="••••••••" required>
                     </div>
                     <button type="submit" class="btn-champions">Ingresar a la Arena</button>
                 </form>
                 <a href="#" class="switch-link" onclick="cambiarVista('registro')">¿No tienes cuenta? Regístrate aquí</a>
             </div>
 
-            <!-- BLOQUE 2: REGISTRO DE NUEVOS COMPETIDORES -->
             <div id="box-registro" style="display: none;">
                 <form action="{{ url_for('registrar') }}" method="POST">
                     <div class="form-group">
-                        <label for="reg-name">Nombre o Apodo</label>
-                        <input type="text" id="reg-name" name="nombre" class="input-control" placeholder="Ej: K-milo" required>
+                        <label>Nombre o Apodo</label>
+                        <input type="text" name="nombre" class="input-control" placeholder="Ej: K-milo" required>
                     </div>
                     <div class="form-group">
-                        <label for="reg-email">Correo Electrónico</label>
-                        <input type="email" id="reg-email" name="email" class="input-control" placeholder="nombre@correo.com" required>
+                        <label>Correo Electrónico</label>
+                        <input type="email" name="email" class="input-control" placeholder="nombre@correo.com" required>
                     </div>
                     <div class="form-group">
-                        <label for="reg-password">Contraseña de Acceso</label>
-                        <input type="password" id="reg-password" name="clave" class="input-control" placeholder="Crea tu clave segura" required>
+                        <label>Contraseña de Acceso</label>
+                        <input type="password" name="clave" class="input-control" placeholder="Crea tu clave segura" required>
                     </div>
                     <button type="submit" class="btn-champions">Registrar Competidor</button>
                 </form>
                 <a href="#" class="switch-link" onclick="cambiarVista('login')">¿Ya estás registrado? Inicia Sesión</a>
             </div>
-
         </div>
     </div>
 
-    <!-- Script de intercambio de pantallas -->
     <script>
         function cambiarVista(pantalla) {
             const loginBox = document.getElementById('box-login');
             const registroBox = document.getElementById('box-registro');
-            
             if (pantalla === 'registro') {
                 loginBox.style.display = 'none';
                 registroBox.style.display = 'block';
