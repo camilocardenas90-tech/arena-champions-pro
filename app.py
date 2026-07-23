@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, session
+from flask import Flask, render_template, request, redirect, flash, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "CLAVE_SECRETA_CHAMPIONS_2026")
 
-# 🔥 EL CAMBIO ESTRATÉGICO: Almacenamiento en memoria RAM ultra rápida
+# EL CAMBIO ESTRATÉGICO: Almacenamiento en memoria RAM ultra rápida
 # Evita bloqueos de archivos físicos dinámicos en los servidores de Railway
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -68,7 +68,7 @@ def inicializar_base_datos_segura():
 @app.route('/')
 def index():
     if 'user_id' in session:
-        return redirect('/dashboard')
+        return redirect(url_for('dashboard'))
     return render_template('login.html')
 
 @app.route('/registrar', methods=['POST'])
@@ -79,13 +79,13 @@ def registrar():
     
     if Usuario.query.filter_by(email=email).first():
         flash("Este correo electrónico ya está registrado.")
-        return redirect('/')
-        
+        return redirect(url_for('index'))
+    
     nuevo_user = Usuario(nombre=nombre, email=email, clave=clave, pago_jornada_actual=True)
     db.session.add(nuevo_user)
     db.session.commit()
     flash("¡Registro exitoso en la Arena Champions Pro!")
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -97,27 +97,27 @@ def login():
         session['user_id'] = user.id
         session['user_nombre'] = user.nombre
         session['es_admin'] = user.es_comisionado
-        return redirect('/dashboard')
+        return redirect(url_for('dashboard'))
     flash("Credenciales incorrectas de acceso.")
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' not in session:
-        return redirect('/')
-        
+        return redirect(url_for('index'))
+    
     usuario_actual = Usuario.query.get(session['user_id'])
     
     # Parche anti-bucles de sesión: si las cookies persisten pero el usuario fue purgado
     if not usuario_actual:
         session.clear()
-        return redirect('/')
-        
+        return redirect(url_for('index'))
+    
     partidos = PartidoChampions.query.all()
     ranking_semana = Usuario.query.order_by(Usuario.puntos_semana.desc(), Usuario.exactos_semana.desc()).all()
     ranking_general = Usuario.query.order_by(Usuario.puntos_general.desc(), Usuario.exactos_general.desc()).all()
@@ -140,15 +140,15 @@ def dashboard():
 @app.route('/apostar/<int:partido_id>', methods=['POST'])
 def apostar(partido_id):
     if 'user_id' not in session:
-        return redirect('/')
+        return redirect(url_for('index'))
     user = Usuario.query.get(session['user_id'])
     partido = PartidoChampions.query.get(partido_id)
     ahora = datetime.now()
     
     if partido.fecha_inicio < ahora or partido.cerrado:
         flash("Mercado cerrado. No se permiten apuestas fuera de tiempo.")
-        return redirect('/dashboard')
-        
+        return redirect(url_for('dashboard'))
+    
     goles_l = int(request.form['goles_l'])
     goles_v = int(request.form['goles_v'])
     pred_penales = request.form.get('pred_penales', "")
@@ -159,17 +159,21 @@ def apostar(partido_id):
         apuesta.pred_goles_v = goles_v
         apuesta.pred_penales = pred_penales
     else:
-        nueva_apuesta = ApuestaChampions(usuario_id=user.id, partido_id=partido.id, pred_goles_l=goles_l, pred_goles_v=goles_v, pred_penales=pred_penales)
+        nueva_apuesta = ApuestaChampions(usuario_id=user.id, 
+                                         partido_id=partido.id, 
+                                         pred_goles_l=goles_l, 
+                                         pred_goles_v=goles_v, 
+                                         pred_penales=pred_penales)
         db.session.add(nueva_apuesta)
-        
+    
     db.session.commit()
     flash("Pronóstico guardado exitosamente.")
-    return redirect('/dashboard')
+    return redirect(url_for('dashboard'))
 
 @app.route('/admin_control_total')
 def admin_control_total():
     if 'user_id' not in session or not session.get('es_admin'):
-        return redirect('/')
+        return redirect(url_for('index'))
     usuarios = Usuario.query.filter_by(es_comisionado=False).all()
     partidos = PartidoChampions.query.all()
     return render_template('admin_control.html', usuarios=usuarios, partidos=partidos)
@@ -177,14 +181,14 @@ def admin_control_total():
 @app.route('/admin_reiniciar_semana_manual')
 def admin_reiniciar_semana_manual():
     if 'user_id' not in session or not session.get('es_admin'):
-        return redirect('/')
+        return redirect(url_for('index'))
     usuarios = Usuario.query.all()
     for u in usuarios:
         u.puntos_semana = 0
         u.exactos_semana = 0
     db.session.commit()
     flash("Arena purificada con éxito. ¡Tablero en cero para la nueva Jornada!")
-    return redirect('/admin_control_total')
+    return redirect(url_for('admin_control_total'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
