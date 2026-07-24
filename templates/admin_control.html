@@ -3,71 +3,384 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANEL DE CONTROL TOTAL - ADMINISTRADOR</title>
+    <title>Comisionado Supremo - Arena Champions Pro</title>
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body { 
-            background: radial-gradient(circle at center, #0a1128 0%, #020617 100%); 
-            color: #ffffff; 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            padding: 20px; 
-            text-align: center; 
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url("{{ url_for('static', filename='fondo.png') }}?v=5") no-repeat center top fixed;
+            background-size: cover; 
             min-height: 100vh;
-            box-sizing: border-box;
+            color: #ffffff;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 60px;
         }
-        .admin-card { 
-            background-color: rgba(15, 23, 42, 0.55); 
-            border: 2px solid #38bdf8; 
-            border-radius: 25px; 
-            max-width: 850px; 
-            margin: 0 auto 30px auto; 
-            padding: 30px 20px; 
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.15); 
-            box-sizing: border-box;
-            backdrop-filter: blur(12px);
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(4, 9, 29, 0.4) 0%, rgba(5, 11, 31, 0.7) 100%);
+            z-index: 1;
         }
-        .neon-title { color: #ffd700; font-size: 1.8rem; text-transform: uppercase; margin-top: 0; margin-bottom: 20px; font-family: sans-serif; font-weight: 900; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
-        .btn-nav { display: inline-block; background: #020617; color: #38bdf8; border: 2px solid #38bdf8; padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: bold; margin-bottom: 25px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: 0.2s; }
-        .btn-nav:hover { background: #38bdf8; color: #020617; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
-        .btn-danger-giant { background: linear-gradient(90deg, #e11d48, #be123c); color: white; border: none; padding: 16px 35px; border-radius: 50px; font-size: 1rem; font-weight: bold; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 5px 15px rgba(225, 29, 72, 0.3); letter-spacing: 1px; transition: 0.2s; }
-        .btn-danger-giant:hover { transform: scale(1.01); box-shadow: 0 8px 20px rgba(225, 29, 72, 0.5); }
-        .btn-submit-action { background: #38bdf8; border: none; color: #020617; font-size: 0.95rem; font-weight: 700; padding: 14px 40px; border-radius: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; margin-top: 15px; }
-        .btn-submit-action:hover { background: #ffffff; box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2); }
+
+        .admin-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .admin-header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(234, 179, 8, 0.4);
+            font-weight: 900;
+            color: #facc15; /* Tono dorado de jerarquía admin */
+        }
+
+        .admin-header p {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 900px) {
+            .admin-grid {
+                grid-template-columns: 1fr 1.2fr;
+            }
+        }
+
+        .glass-card {
+            background: rgba(10, 21, 54, 0.6);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.6);
+            margin-bottom: 25px;
+        }
+
+        .seccion-titulo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.15rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .alert-flash {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #a7f3d0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
     </style>
 </head>
+<style>
+        /* Formulario de Carga Masiva */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            text-transform: uppercase;
+        }
+
+        .select-control, .textarea-control {
+            width: 100%;
+            background: rgba(5, 10, 25, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 14px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .select-control:focus, .textarea-control:focus {
+            border-color: #facc15;
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.3);
+        }
+
+        .textarea-control {
+            resize: vertical;
+            min-height: 120px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #a7f3d0;
+        }
+
+        .btn-accion {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-inyectar {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-inyectar:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-danger-outline {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .btn-danger-outline:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        /* Tablas de Control Administrativo */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .admin-table th {
+            font-family: 'Cinzel', serif;
+            color: #94a3b8;
+            padding: 12px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .admin-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            vertical-align: middle;
+        }
+
+        .btn-tabla {
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cerrar { background: #ea580c; color: #ffffff; }
+        .btn-cerrar:hover { background: #f97316; }
+        .btn-abrir { background: #16a34a; color: #ffffff; }
+        .btn-abrir:hover { background: #22c55e; }
+        .btn-borrar { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .btn-borrar:hover { background: #ef4444; color: #ffffff; }
+        
+        .btn-volver-dashboard {
+            display: inline-block;
+            color: #38bdf8;
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        .btn-volver-dashboard:hover { text-decoration: underline; }
+</style>
 <body>
-    <br>
-    <a href="/dashboard" class="btn-nav">⬅️ VOLVER AL DASHBOARD PRINCIPAL</a>
-    
-    <!-- SECCIÓN DE REINICIO SEMANAL MANUAL -->
-    <div class="admin-card" style="border-color: #e11d48; box-shadow: 0 0 30px rgba(225, 29, 72, 0.15);">
-        <h2 class="neon-title" style="color: #e11d48;">🚨 CONTROL SEMANAL DE LA ARENA</h2>
-        <p style="font-family: sans-serif; font-size: 0.9rem; color: #94a3b8; line-height: 1.5; max-width: 650px; margin: 0 auto 25px auto;">
-            Al presionar este botón, **reiniciarás manualmente los marcadores de la semana a 0 puntos** para todos los jugadores de forma limpia. Úsalo solo cuando cierres la fecha oficial en el grupo de WhatsApp.
-        </p>
-        <a href="/admin_reiniciar_semana_manual" class="btn-danger-giant" onclick="return confirm('¿ESTÁS SEGURO? Esto pondrá los puntajes de la semana en cero para todos.')">
-            🔄 REINICIAR TABLERO SEMANAL AHORA
-        </a>
+
+    <div class="admin-container">
+        
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert-flash">🛡️ {{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <header class="admin-header">
+            <a href="{{ url_for('dashboard') }}" class="btn-volver-dashboard">⬅️ Volver al Dashboard</a>
+            <h1>Panel de Control Supremo</h1>
+            <p>Comisionado Principal de la Arena</p>
+        </header>
+
+        <div class="admin-grid">
+            
+            <!-- COLUMNA IZQUIERDA: INYECTOR Y PURGADOR DE JORNADAS -->
+            <div class="col-izq">
+                
+                <div class="glass-card">
+                    <h3 class="seccion-titulo">🚀 Inyector Masivo de Partidos</h3>
+                    <form action="{{ url_for('admin_carga_masiva') }}" method="POST">
+                        <div class="form-group">
+                            <label>Instancia del Torneo</label>
+                            <select name="instancia" class="select-control">
+                                <option value="Fase de Liga">Fase de Liga</option>
+                                <option value="Octavos de Final">Octavos de Final</option>
+                                <option value="Cuartos de Final">Cuartos de Final</option>
+                                <option value="Semifinal">Semifinal</option>
+                                <option value="Gran Final">Gran Final</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Datos de los Partidos (Separados por Comas)</label>
+                            <textarea name="texto_partidos" class="textarea-control" placeholder="Formato: Local,LogoLocal,Visita,LogoVisita,Año-Mes-Día Hora:Minuto&#10;Ejemplo:&#10;Real Madrid,real-madrid.png,Manchester United,manchester-united.png,2026-09-15 16:00"></textarea>
+                            <span style="font-size: 0.7rem; color: #94a3b8; display: block; margin-top: 8px;">
+                                💡 Tip: Usa los nombres exactos de los logos guardados en la carpeta static/clubes/.
+                            </span>
+                        </div>
+                        
+                        <button type="submit" class="btn-accion btn-inyectar">Inyectar Fecha Europea</button>
+                    </form>
+                </div>
+
+                <div class="glass-card">
+                    <h3 class="seccion-titulo">🛡️ Purgador Semanal</h3>
+                    <p style="font-size:0.85rem; color:#94a3b8; margin-bottom:15px; line-height:1.4;">
+                        Al presionar este botón, los casilleros de puntos semanales de todos los jugadores de la oficina volverán a cero. Los puntajes históricos generales no se alterarán.
+                    </p>
+                    <a href="{{ url_for('admin_reiniciar_semana_manual') }}" class="btn-accion btn-danger-outline" onclick="return confirm('¿Seguro que deseas reiniciar el tablero de la semana en cero? Esta acción no se puede deshacer.');">
+                        Purificar Arena Semanal
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA: MONITOREO DE PARTIDOS Y USUARIOS -->
+            <div class="col-der">
+                
+                <!-- GESTIÓN DE CARTELERA EN VIVO -->
+                <div class="glass-card">
+                    <h3 class="seccion-titulo">⚽ Cartelera Activa</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Partido</th>
+                                <th style="text-align: center;">Mercado</th>
+                                <th style="text-align: right;">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in partidos %}
+                            <tr>
+                                <td style="font-weight: 500;">
+                                    {{ p.club_local }} <span style="color:#38bdf8;">vs</span> {{ p.club_visita }}
+                                </td>
+                                <td style="text-align: center;">
+                                    {% if p.cerrado %}
+                                        <a href="{{ url_for('admin_alternar_apuestas', partido_id=p.id) }}" class="btn-tabla btn-cerrar">Cerrado</a>
+                                    {% else %}
+                                        <a href="{{ url_for('admin_alternar_apuestas', partido_id=p.id) }}" class="btn-tabla btn-abrir">Abierto</a>
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: right;">
+                                    <a href="{{ url_for('admin_eliminar_partido', partido_id=p.id) }}" class="btn-tabla btn-borrar" onclick="return confirm('¿Eliminar este partido por completo?');">Eliminar</a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: #94a3b8; padding: 20px 0;">No hay partidos cargados en la base de datos.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- GESTIÓN DE COMPETIDORES -->
+                <div class="glass-card">
+                    <h3 class="seccion-titulo">👥 Competidores Registrados</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th style="text-align: right;">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in usuarios %}
+                            <tr>
+                                <td style="font-weight: 600;">{{ u.nombre }}</td>
+                                <td style="color: #94a3b8;">{{ u.email }}</td>
+                                <td style="text-align: right;">
+                                    <a href="{{ url_for('admin_eliminar_usuario', usuario_id=u.id) }}" class="btn-tabla btn-borrar" onclick="return confirm('¿Deseas purgar permanentemente a este usuario de la competencia?');">Expulsar</a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: #94a3b8; padding: 20px 0;">No hay compañeros registrados aún.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
     </div>
 
-    <!-- SECCIÓN DE INYECCIÓN DE PARTIDOS -->
-    <div class="admin-card">
-        <h2 class="neon-title">⚡ INYECTOR MASIVO DE PARTIDOS</h2>
-        <form action="#" method="POST">
-            <textarea name="lista_partidos" rows="4" style="width: 96%; background: #020617; color: #fff; border: 1px solid #334155; border-radius: 12px; padding: 15px; font-family: monospace; outline: none; font-size: 0.9rem; box-sizing: border-box;" placeholder="Real Madrid,rm,Barcelona,bar,15,9,16,0" disabled></textarea>
-            <br>
-            <div style="margin-top: 20px;">
-                <label style="color: #94a3b8; font-family: sans-serif; font-size: 0.85rem; font-weight: bold; margin-right: 10px; text-transform: uppercase; letter-spacing: 1px;">🗺️ ETAPAS DE LA CHAMPIONS:</label>
-                <select name="instancia_playoff" style="background: #020617; color: #ffd700; border: 1px solid #334155; padding: 10px 15px; border-radius: 10px; font-weight: bold; outline: none;" disabled>
-                    <option value="FASE_LIGA">FASE DE LIGA (Grupos Europeos)</option>
-                    <option value="OCTAVOS">OCTAVOS DE FINAL</option>
-                    <option value="CUARTOS">CUARTOS DE FINAL</option>
-                    <option value="SEMIFINAL">SEMIFINALES</option>
-                    <option value="GRAN_FINAL">LA GRAN FINAL 🏆</option>
-                </select>
-            </div>
-            <button type="button" class="btn-submit-action" style="opacity: 0.5; cursor: not-allowed;">CARGAR CARTELERA (MÓDULO EN MAQUETA)</button>
-        </form>
-    </div>
 </body>
 </html>
