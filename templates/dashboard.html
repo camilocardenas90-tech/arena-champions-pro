@@ -6,15 +6,11 @@
     <title>Arena Champions Pro - Panel de Apuestas</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: url("{{ url_for('static', filename='fondo_dashboard.png') }}?v=5") no-repeat center top fixed;
+            background: url("{{ url_for('static', filename='fondo_dashboard.png') }}?v=8") no-repeat center top fixed;
             background-size: cover; 
             min-height: 100vh;
             color: #ffffff;
@@ -24,307 +20,164 @@
         }
 
         body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(180deg, rgba(4, 9, 29, 0.3) 0%, rgba(5, 11, 31, 0.6) 100%);
             z-index: 1;
         }
 
-        .dashboard-container {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-
-        .main-header {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-
+        .dashboard-container { position: relative; z-index: 2; width: 100%; max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+        .main-header { text-align: center; margin-bottom: 35px; }
         .main-header h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 2.5rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 102, 255, 0.6);
-            font-weight: 900;
+            font-family: 'Cinzel', serif; font-size: 2.5rem; letter-spacing: 5px;
+            text-transform: uppercase; text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 102, 255, 0.6); font-weight: 900;
         }
+        .main-header p { font-family: 'Cinzel', serif; font-size: 0.85rem; color: #38bdf8; letter-spacing: 3px; text-transform: uppercase; margin-top: 8px; font-weight: 700; }
 
-        .main-header p {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            color: #38bdf8;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 8px;
-            font-weight: 700;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-        }
-
-        @media (min-width: 900px) {
-            .dashboard-grid {
-                grid-template-columns: 1.6fr 1.2fr;
-            }
-        }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 25px; }
+        @media (min-width: 900px) { .dashboard-grid { grid-template-columns: 1.6fr 1.2fr; } }
 
         .glass-card {
-            background: rgba(10, 25, 64, 0.65);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.6);
-            margin-bottom: 25px;
+            background: rgba(10, 25, 64, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 20px; padding: 25px; box-shadow: 0 30px 50px rgba(0, 0, 0, 0.6); margin-bottom: 25px;
         }
-
-        .pozo-box {
-            text-align: center;
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            box-shadow: 0 0 35px rgba(0, 102, 255, 0.25);
-            background: rgba(7, 39, 107, 0.7);
-        }
-
-        .pozo-box h2 {
-            font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
-            letter-spacing: 4px;
-            color: #cbd5e1;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .pozo-monto {
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: #10b981; 
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
-        }
-
-        .seccion-titulo {
-            font-family: 'Cinzel', serif;
-            font-size: 1.15rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            padding-bottom: 12px;
-        }
-    </style>
-</head>
-<style>
-        /* ESTILOS INTERACTIVOS ESTILO VIDEOJUEGO DE FÚTBOL */
+        .pozo-box { text-align: center; border: 1px solid rgba(56, 189, 248, 0.4); box-shadow: 0 0 35px rgba(0, 102, 255, 0.25); background: rgba(7, 39, 107, 0.7); }
+        .pozo-box h2 { font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 4px; color: #cbd5e1; text-transform: uppercase; margin-bottom: 8px; }
+        .pozo-monto { font-size: 2.8rem; font-weight: 700; color: #10b981; text-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+        .seccion-titulo { font-family: 'Cinzel', serif; font-size: 1.15rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 12px; }
         .partido-tarjeta-ps {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.4) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;
         }
+        .partido-tarjeta-ps:hover { border-color: #38bdf8; box-shadow: 0 15px 35px rgba(56, 189, 248, 0.2); transform: translateY(-2px); }
+        .partido-header-ps { display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px; }
+        .vs-container-ps { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .equipo-box-ps { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .escudo-ps { width: 65px; height: 65px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.15)); }
+        .equipo-nombre-ps { font-size: 0.85rem; font-weight: 600; margin-top: 10px; color: #f1f5f9; }
+        .marcador-central-ps { display: flex; align-items: center; gap: 12px; }
+        .input-gol-ps { width: 50px; height: 55px; background: rgba(5, 10, 25, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; color: #ffffff; font-size: 1.6rem; font-weight: 700; text-align: center; outline: none; }
+        .vs-texto-ps { font-family: 'Cinzel', serif; font-size: 0.9rem; color: #64748b; font-weight: 700; }
+        .btn-guardar-ps { width: 100%; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; color: #38bdf8; font-weight: 600; font-size: 0.8rem; padding: 10px; margin-top: 12px; cursor: pointer; text-transform: uppercase; transition: all 0.3s ease; }
+        .btn-guardar-ps:hover { background: #38bdf8; color: #04091d; }
 
-        .partido-tarjeta-ps:hover {
-            border-color: #38bdf8;
-            box-shadow: 0 15px 35px rgba(56, 189, 248, 0.2);
-            transform: translateY(-2px);
+        .btn-stats-ps {
+            width: 100%; background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #cbd5e1; font-size: 0.75rem; font-weight: 600; padding: 10px; margin-top: 8px; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease;
         }
-
-        .partido-header-ps {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 8px;
+        .btn-stats-ps:hover { border-color: #38bdf8; color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
+        /* ESTILOS DE LA PIZARRA DE ALINEACIONES PS */
+        .ps-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(4, 8, 24, 0.94); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.4s ease; padding: 20px;
         }
+        .ps-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .ps-modal-container { width: 100%; max-width: 1100px; height: 90vh; background: rgba(13, 27, 68, 0.5); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 24px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); display: flex; flex-direction: column; overflow: hidden; transform: scale(0.95); transition: transform 0.4s ease; }
+        .ps-modal-overlay.active .ps-modal-container { transform: scale(1); }
+        .ps-modal-header { padding: 20px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .ps-modal-header h2 { font-family: 'Cinzel', serif; font-size: 1.3rem; letter-spacing: 2px; }
+        .ps-close-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ffffff; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .ps-close-btn:hover { background: #ef4444; border-color: #ef4444; }
+        .ps-modal-body { flex: 1; display: grid; grid-template-columns: 1fr; overflow-y: auto; padding: 25px; gap: 25px; }
+        @media (min-width: 850px) { .ps-modal-body { grid-template-columns: 1.2fr 1fr; } }
 
-        .vs-container-ps {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
+        .ps-cancha-tactica {
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%);
+            border: 2px solid rgba(56, 189, 248, 0.3); border-radius: 16px; position: relative; min-height: 420px; display: flex; flex-direction: column; justify-content: space-around; padding: 20px 0;
         }
+        .ps-linea-media { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(56, 189, 248, 0.2); }
+        .ps-circulo-central { position: absolute; top: 50%; left: 50%; width: 100px; height: 100px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 50%; transform: translate(-50%, -50%); }
+        .ps-fila-tactica { display: flex; justify-content: center; gap: 20px; z-index: 2; }
+        .ps-jugador-dot { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 600; text-shadow: 0 2px 4px #000; }
+        .ps-camiseta { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; margin-bottom: 4px; }
+        .cam-local { background: #ef4444; color: #ffffff; border: 1px solid #ffffff; }
+        .cam-visita { background: #ffffff; color: #1e3a8a; border: 1px solid #1e3a8a; }
 
-        .equipo-box-ps {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
+        .ps-stats-panel { display: flex; flex-direction: column; gap: 25px; justify-content: center; }
+        .ps-stat-row { margin-bottom: 5px; }
+        .ps-stat-labels { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: #cbd5e1; }
+        .ps-stat-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; display: flex; }
+        .ps-bar-local { height: 100%; background: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.5); }
+        .ps-bar-visita { height: 100%; background: #f8fafc; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
-        .escudo-ps {
-            width: 65px;
-            height: 65px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.15));
-            transition: transform 0.3s ease;
-        }
-
-        .partido-tarjeta-ps:hover .escudo-ps {
-            transform: scale(1.08);
-        }
-
-        .equipo-nombre-ps {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
-            color: #f1f5f9;
-        }
-
-        .marcador-central-ps {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .input-gol-ps {
-            width: 50px;
-            height: 55px;
-            background: rgba(5, 10, 25, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            color: #ffffff;
-            font-size: 1.6rem;
-            font-weight: 700;
-            text-align: center;
-            outline: none;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s ease;
-        }
-
-        .input-gol-ps:focus {
-            border-color: #38bdf8;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-            background: rgba(5, 10, 25, 0.95);
-        }
-
-        .vs-texto-ps {
-            font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
-            color: #64748b;
-            font-weight: 700;
-        }
-
-        .btn-guardar-ps {
-            width: 100%;
-            background: rgba(56, 189, 248, 0.08);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 8px;
-            color: #38bdf8;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 0.8rem;
-            padding: 10px;
-            margin-top: 15px;
-            cursor: pointer;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        .btn-guardar-ps:hover {
-            background: #38bdf8;
-            color: #04091d;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
-        }
-
-        .tabla-champions {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .tabla-champions th {
-            font-family: 'Cinzel', serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #cbd5e1;
-            padding: 12px 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
+        .tabla-champions { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        .tabla-champions th { font-family: 'Cinzel', serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #cbd5e1; padding: 12px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
         .tabla-champions td { padding: 14px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
         .tabla-champions tr:last-child td { border-bottom: none; }
-        .podio-1 { color: #fbbf24; font-weight: bold; } 
-        .podio-2 { color: #e2e8f0; font-weight: bold; } 
-        .podio-3 { color: #f97316; font-weight: bold; } 
-
-        .btn-panel-supremo {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background: linear-gradient(135deg, #a16207 0%, #eab308 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 15px;
-            color: #04091d;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 0.85rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-decoration: none;
-            box-shadow: 0 4px 20px rgba(234, 179, 8, 0.25);
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-
-        .btn-panel-supremo:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, #ca8a04 0%, #facc15 100%);
-            box-shadow: 0 6px 25px rgba(250, 204, 21, 0.45);
-        }
-
-        .btn-salir {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            border-radius: 10px;
-            padding: 13px;
-            color: #fca5a5;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-
+        .podio-1 { color: #fbbf24; font-weight: bold; } .podio-2 { color: #e2e8f0; font-weight: bold; } .podio-3 { color: #f97316; font-weight: bold; } 
+        .btn-panel-supremo { display: block; width: 100%; text-align: center; background: linear-gradient(135deg, #a16207 0%, #eab308 100%); border: none; border-radius: 10px; padding: 15px; color: #04091d; font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; margin-top: 15px; }
+        .btn-salir { display: block; width: 100%; text-align: center; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 10px; padding: 13px; color: #fca5a5; font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; margin-top: 15px; }
         .btn-salir:hover { background: #ef4444; color: #ffffff; }
-        .audio-control-btn { position: fixed; bottom: 25px; right: 25px; z-index: 10; background: rgba(10, 21, 54, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: all 0.3s ease; }
-        .audio-control-btn:hover { transform: scale(1.1); border-color: #38bdf8; }
-</style>
+        .audio-control-btn { position: fixed; bottom: 25px; right: 25px; z-index: 10; background: rgba(10, 21, 54, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    </style>
+</head>
 <body>
-
     <button id="musicBtn" class="audio-control-btn" onclick="toggleMusic()">🔊</button>
-    <audio id="championsHimno" loop>
-        <source src="{{ url_for('static', filename='himno.mp3') }}?v=5" type="audio/mpeg">
-    </audio>
+    <audio id="championsHimno" loop><source src="{{ url_for('static', filename='himno.mp3') }}?v=8" type="audio/mpeg"></audio>
 
+    <!-- INTERFAZ COMPLETA DE ALINEACIONES PREMIUM -->
+    <div id="psStatsModal" class="ps-modal-overlay">
+        <div class="ps-modal-container">
+            <div class="ps-modal-header">
+                <h2>🎮 Alineaciones Oficiales y Estadísticas</h2>
+                <button class="ps-close-btn" onclick="cerrarModalPs()">✕</button>
+            </div>
+            <div class="ps-modal-body">
+                <div class="ps-cancha-tactica">
+                    <div class="ps-linea-media"></div><div class="ps-circulo-central"></div>
+                    <!-- Real Madrid Formación (4-3-3) -->
+                    <div class="ps-fila-tactica">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">7</div>Vini Jr.</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">9</div>Mbappé</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">11</div>Rodrygo</div>
+                    </div>
+                    <div class="ps-fila-tactica">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">5</div>Bellingham</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">6</div>Camavinga</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">8</div>Valverde</div>
+                    </div>
+                    <div class="ps-fila-tactica">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">23</div>Mendy</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">22</div>Rüdiger</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">3</div>Militao</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">2</div>Carvajal</div>
+                    </div>
+                    <!-- Manchester United Formación (4-2-3-1) -->
+                    <div class="ps-fila-tactica" style="margin-top: 30px;">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">20</div>Dalot</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">4</div>De Ligt</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">6</div>Martinez</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">3</div>Mazraoui</div>
+                    </div>
+                    <div class="ps-fila-tactica">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">18</div>Casemiro</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">37</div>Mainoo</div>
+                    </div>
+                    <div class="ps-fila-tactica">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">17</div>Garnacho</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">8</div>Fernandes</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">10</div>Rashford</div>
+                    </div>
+                    <div class="ps-fila-tactica"><div class="ps-jugador-dot"><div class="ps-camiseta cam-local">11</div>Højlund</div></div>
+                </div>
+                <!-- BARRAS DE ESTADÍSTICAS NEÓN -->
+                <div class="ps-stats-panel">
+                    <div class="ps-stat-row">
+                        <div class="ps-stat-labels"><span>45%</span><span>POSESIÓN DE BALÓN</span><span>55%</span></div>
+                        <div class="ps-stat-bar-bg"><div class="ps-bar-local" style="width: 45%;"></div><div class="ps-bar-visita" style="width: 55%;"></div></div>
+                    </div>
+                    <div class="ps-stat-row">
+                        <div class="ps-stat-labels"><span>3</span><span>TIROS AL ARCO</span><span>6</span></div>
+                        <div class="ps-stat-bar-bg"><div class="ps-bar-local" style="width: 33%;"></div><div class="ps-bar-visita" style="width: 67%;"></div></div>
+                    </div>
+                    <div class="ps-stat-row">
+                        <div class="ps-stat-labels"><span style="color:#eab308;">🟨 2</span><span>TARJETAS AMARILLAS</span><span style="color:#eab308;">1 🟨</span></div>
+                        <div class="ps-stat-bar-bg"><div class="ps-bar-local" style="width: 66%; background:#eab308;"></div><div class="ps-bar-visita" style="width: 34%; background:#cbd5e1;"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLERO GENERAL -->
     <div class="dashboard-container">
         <header class="main-header">
             <h1>Arena Champions Pro</h1>
@@ -332,27 +185,16 @@
         </header>
 
         <div class="dashboard-grid">
-            
             <div class="col-izq">
-                <div class="glass-card pozo-box">
-                    <h2>Pozo Acumulado</h2>
-                    <div class="pozo-monto">${{ premio_80 }} CLP</div>
-                </div>
-
+                <div class="glass-card pozo-box"><h2>Pozo Acumulado</h2><div class="pozo-monto">${{ premio_80 }} CLP</div></div>
                 <div class="glass-card">
                     <h3 class="seccion-titulo">Cartelera de Partidos</h3>
-                    
-                    <!-- PARTIDO DE PRUEBA: MANCHESTER UNITED VS REAL MADRID CON GUIONES -->
                     <div class="partido-tarjeta-ps">
-                        <div class="partido-header-ps">
-                            <span>Fase de Liga — Jornada de Prueba</span>
-                            <span style="color: #10b981; font-weight: 600;">Mercado Abierto</span>
-                        </div>
-                        
+                        <div class="partido-header-ps"><span>Fase de Liga — Jornada de Prueba</span><span style="color: #10b981; font-weight:600;">Mercado Abierto</span></div>
                         <form action="#" method="POST">
                             <div class="vs-container-ps">
                                 <div class="equipo-box-ps">
-                                    <img src="{{ url_for('static', filename='clubes/manchester-united.png') }}" alt="Manchester United" class="escudo-ps">
+                                    <img src="{{ url_for('static', filename='clubes/manchester-united.png') }}" class="escudo-ps">
                                     <div class="equipo-nombre-ps">Manchester United</div>
                                 </div>
                                 <div class="marcador-central-ps">
@@ -361,65 +203,26 @@
                                     <input type="number" class="input-gol-ps" placeholder="0" min="0" max="9" required>
                                 </div>
                                 <div class="equipo-box-ps">
-                                    <img src="{{ url_for('static', filename='clubes/real-madrid.png') }}" alt="Real Madrid" class="escudo-ps">
+                                    <img src="{{ url_for('static', filename='clubes/real-madrid.png') }}" class="escudo-ps">
                                     <div class="equipo-nombre-ps">Real Madrid</div>
                                 </div>
                             </div>
                             <button type="button" class="btn-guardar-ps">Guardar Pronóstico</button>
+                            <button type="button" class="btn-stats-ps" onclick="abrirModalPs()">📊 Ver Datos y Alineaciones</button>
                         </form>
                     </div>
-
-                    {% if not partidos and false %}
-                    <div style="text-align: center; color: #94a3b8; padding: 40px 15px; font-size: 0.95rem; background: rgba(5, 10, 30, 0.4); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1);">
-                        🛡️ No hay partidos cargados en la cartelera actual.
-                    </div>
-                    {% endif %}
-
-                    {% for p in partidos %}
-                    <div class="partido-tarjeta-ps">
-                        <div class="partido-header-ps"><span>{{ p.instancia }}</span></div>
-                        <div class="vs-container-ps">
-                            <div class="equipo-box-ps">
-                                <img src="{{ url_for('static', filename='clubes/' + p.logo_local) }}" class="escudo-ps">
-                                <div class="equipo-nombre-ps">{{ p.club_local }}</div>
-                            </div>
-                            <div class="marcador-central-ps">
-                                <input type="number" class="input-gol-ps" placeholder="-" readonly>
-                                <div class="vs-texto-ps">VS</div>
-                                <input type="number" class="input-gol-ps" placeholder="-" readonly>
-                            </div>
-                            <div class="equipo-box-ps">
-                                <img src="{{ url_for('static', filename='clubes/' + p.logo_visita) }}" class="escudo-ps">
-                                <div class="equipo-nombre-ps">{{ p.club_visita }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
                 </div>
             </div>
-
             <div class="col-der">
                 <div class="glass-card">
                     <h3 class="seccion-titulo">🏆 Jornada Actual</h3>
                     <table class="tabla-champions">
-                        <thead>
-                            <tr>
-                                <th style="width: 15%;">#</th>
-                                <th style="width: 45%;">Usuario</th>
-                                <th style="width: 20%; text-align: center;">Pts</th>
-                                <th style="width: 20%; text-align: center;">Ex</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th style="width: 15%;">#</th><th style="width: 45%;">Usuario</th><th style="width: 20%; text-align: center;">Pts</th><th style="width: 20%; text-align: center;">Ex</th></tr></thead>
                         <tbody>
                             {% for u in ranking_semana %}
-                            <tr>
-                                <td class="{% if loop.index == 1 %}podio-1{% elif loop.index == 2 %}podio-2{% elif loop.index == 3 %}podio-3{% endif %}">{{ loop.index }}°</td>
-                                <td style="font-weight: 600;">{{ u.nombre }}</td>
-                                <td style="text-align: center; font-weight: 700; color: #38bdf8;">{{ u.puntos_semana }}</td>
-                                <td style="text-align: center; color: #94a3b8;">{{ u.exactos_semana }}</td>
-                            </tr>
+                            <tr><td class="{% if loop.index == 1 %}podio-1{% elif loop.index == 2 %}podio-2{% elif loop.index == 3 %}podio-3{% endif %}">{{ loop.index }}°</td><td style="font-weight:600;">{{ u.nombre }}</td><td style="text-align:center; font-weight:700; color:#38bdf8;">{{ u.puntos_semana }}</td><td style="text-align:center; color:#94a3b8;">{{ u.exactos_semana }}</td></tr>
                             {% else %}
-                            <tr><td colspan="4" style="text-align: center; color: #94a3b8; padding: 15px 0;">Esperando competidores...</td></tr>
+                            <tr><td colspan="4" style="text-align:center; color:#94a3b8; padding:15px 0;">Esperando competidores...</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -428,46 +231,24 @@
                 <div class="glass-card">
                     <h3 class="seccion-titulo">🏅 Ganadores Anteriores</h3>
                     <table class="tabla-champions">
-                        <thead>
-                            <tr>
-                                <th style="width: 45%;">Jornada</th>
-                                <th style="width: 35%;">Campeón</th>
-                                <th style="width: 20%; text-align: right;">Premio</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th style="width: 45%;">Jornada</th><th style="width: 35%;">Campeón</th><th style="width: 20%; text-align: right;">Premio</th></tr></thead>
                         <tbody>
-                            <tr>
-                                <td style="color: #94a3b8;">Jornada 1 - PlayOffs</td>
-                                <td style="font-weight: 600;">K-milo 👑</td>
-                                <td style="text-align: right; font-weight: 700; color: #10b981;">$15.000</td>
-                            </tr>
-                            <tr>
-                                <td style="color: #94a3b8;">Jornada 2 - Octavos</td>
-                                <td style="font-weight: 600;">Matias_U</td>
-                                <td style="text-align: right; font-weight: 700; color: #10b981;">$15.000</td>
-                            </tr>
+                            <tr><td style="color:#94a3b8;">Jornada 1 - PlayOffs</td><td style="font-weight:600;">K-milo 👑</td><td style="text-align: right; font-weight:700; color:#10b981;">$15.000</td></tr>
                         </tbody>
                     </table>
                 </div>
-
-                {% if usuario_actual.es_comisionado %}
-                    <a href="{{ url_for('admin_control_total') }}" class="btn-panel-supremo">⚙️ Panel de Control Supremo</a>
-                {% endif %}
+                {% if usuario_actual.es_comisionado %}<a href="{{ url_for('admin_control_total') }}" class="btn-panel-supremo">⚙️ Panel de Control Supremo</a>{% endif %}
                 <a href="{{ url_for('logout') }}" class="btn-salir">Cerrar Sesión</a>
             </div>
         </div>
     </div>
 
     <script>
-        const audio = document.getElementById('championsHimno');
-        const btn = document.getElementById('musicBtn');
-        window.addEventListener('click', () => {
-            if (audio.paused && btn.innerText === '🔊') { audio.play().catch(e => console.log("Bloqueado.")); }
-        }, { once: true });
-        function toggleMusic() {
-            if (audio.paused) { audio.play(); btn.innerText = '🔊'; } 
-            else { audio.pause(); btn.innerText = '🔇'; }
-        }
+        const audio = document.getElementById('championsHimno'); const btn = document.getElementById('musicBtn');
+        window.addEventListener('click', () => { if (audio.paused && btn.innerText === '🔊') { audio.play().catch(e => {}); } }, { once: true });
+        function toggleMusic() { if (audio.paused) { audio.play(); btn.innerText = '🔊'; } else { audio.pause(); btn.innerText = '🔇'; } }
+        function abrirModalPs() { document.getElementById('psStatsModal').classList.add('active'); }
+        function cerrarModalPs() { document.getElementById('psStatsModal').classList.remove('active'); }
     </script>
 </body>
 </html>
