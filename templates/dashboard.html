@@ -10,7 +10,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: url("{{ url_for('static', filename='fondo_dashboard.png') }}?v=8") no-repeat center top fixed;
+            background: url("{{ url_for('static', filename='fondo_dashboard.png') }}?v=9") no-repeat center top fixed;
             background-size: cover; 
             min-height: 100vh;
             color: #ffffff;
@@ -65,7 +65,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #cbd5e1; font-size: 0.75rem; font-weight: 600; padding: 10px; margin-top: 8px; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease;
         }
         .btn-stats-ps:hover { border-color: #38bdf8; color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
-        /* ESTILOS DE LA PIZARRA DE ALINEACIONES PS */
+        /* ESTILOS DEL MODAL DE DATOS PREVIOS PRE-PARTIDO */
         .ps-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(4, 8, 24, 0.94); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: all 0.4s ease; padding: 20px;
         }
@@ -80,23 +80,29 @@
         @media (min-width: 850px) { .ps-modal-body { grid-template-columns: 1.2fr 1fr; } }
 
         .ps-cancha-tactica {
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.6) 100%);
-            border: 2px solid rgba(56, 189, 248, 0.3); border-radius: 16px; position: relative; min-height: 420px; display: flex; flex-direction: column; justify-content: space-around; padding: 20px 0;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.08) 0%, rgba(15, 23, 42, 0.75) 100%);
+            border: 2px solid rgba(56, 189, 248, 0.4); border-radius: 16px; position: relative; min-height: 460px; display: flex; flex-direction: column; justify-content: space-around; padding: 15px 0;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
         }
-        .ps-linea-media { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(56, 189, 248, 0.2); }
-        .ps-circulo-central { position: absolute; top: 50%; left: 50%; width: 100px; height: 100px; border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 50%; transform: translate(-50%, -50%); }
-        .ps-fila-tactica { display: flex; justify-content: center; gap: 20px; z-index: 2; }
-        .ps-jugador-dot { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 600; text-shadow: 0 2px 4px #000; }
+        .ps-linea-media { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(56, 189, 248, 0.3); }
+        .ps-circulo-central { position: absolute; top: 50%; left: 50%; width: 100px; height: 100px; border: 2px solid rgba(56, 189, 248, 0.3); border-radius: 50%; transform: translate(-50%, -50%); }
+        
+        /* ESCUDOS FLOTANTES DENTRO DE LA CANCHA */
+        .escudo-cancha-local { position: absolute; bottom: 25px; right: 25px; width: 45px; height: 45px; opacity: 0.25; filter: drop-shadow(0 0 8px #ef4444); }
+        .escudo-cancha-visita { position: absolute; top: 25px; left: 25px; width: 45px; height: 45px; opacity: 0.25; filter: drop-shadow(0 0 8px #fff); }
+
+        .ps-fila-tactica { display: flex; justify-content: center; gap: 22px; z-index: 2; }
+        .ps-jugador-dot { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 600; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; }
         .ps-camiseta { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; margin-bottom: 4px; }
-        .cam-local { background: #ef4444; color: #ffffff; border: 1px solid #ffffff; }
-        .cam-visita { background: #ffffff; color: #1e3a8a; border: 1px solid #1e3a8a; }
+        .cam-local { background: #ef4444; color: #ffffff; border: 1px solid #ffffff; box-shadow: 0 0 10px rgba(239,68,68,0.5); }
+        .cam-visita { background: #ffffff; color: #1e3a8a; border: 1px solid #1e3a8a; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
         .ps-stats-panel { display: flex; flex-direction: column; gap: 25px; justify-content: center; }
         .ps-stat-row { margin-bottom: 5px; }
         .ps-stat-labels { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: #cbd5e1; }
         .ps-stat-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; display: flex; }
-        .ps-bar-local { height: 100%; background: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.5); }
-        .ps-bar-visita { height: 100%; background: #f8fafc; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .ps-bar-local { height: 100%; background: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.4); }
+        .ps-bar-visita { height: 100%; background: #f8fafc; box-shadow: 0 0 10px rgba(255,255,255,0.4); }
 
         .tabla-champions { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
         .tabla-champions th { font-family: 'Cinzel', serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #cbd5e1; padding: 12px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
@@ -111,73 +117,96 @@
 </head>
 <body>
     <button id="musicBtn" class="audio-control-btn" onclick="toggleMusic()">🔊</button>
-    <audio id="championsHimno" loop><source src="{{ url_for('static', filename='himno.mp3') }}?v=8" type="audio/mpeg"></audio>
+    <audio id="championsHimno" loop><source src="{{ url_for('static', filename='himno.mp3') }}?v=9" type="audio/mpeg"></audio>
 
-    <!-- INTERFAZ COMPLETA DE ALINEACIONES PREMIUM -->
+    <!-- INTERFAZ COMPLETA DE ALINEACIONES CON ENFOQUE PRE-PARTIDO -->
     <div id="psStatsModal" class="ps-modal-overlay">
         <div class="ps-modal-container">
             <div class="ps-modal-header">
-                <h2>🎮 Alineaciones Oficiales y Estadísticas</h2>
+                <h2>ALINEACIONES OFICIALES Y DATOS PREVIOS</h2>
                 <button class="ps-close-btn" onclick="cerrarModalPs()">✕</button>
             </div>
             <div class="ps-modal-body">
                 <div class="ps-cancha-tactica">
                     <div class="ps-linea-media"></div><div class="ps-circulo-central"></div>
-                    <!-- Real Madrid Formación (4-3-3) -->
+                    
+                    <!-- ESCUDOS OFICIALES FLOTANTES EN EL CÉSPED VIRTUAL -->
+                    <img src="{{ url_for('static', filename='clubes/real-madrid.png') }}" class="escudo-cancha-visita">
+                    <img src="{{ url_for('static', filename='clubes/manchester-united.png') }}" class="escudo-cancha-local">
+                    
+                    <!-- Lado Real Madrid (Alineación Superior en 4-3-3 con Portero) -->
                     <div class="ps-fila-tactica">
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">7</div>Vini Jr.</div>
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">9</div>Mbappé</div>
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">11</div>Rodrygo</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">1</div>Courtois</div>
                     </div>
-                    <div class="ps-fila-tactica">
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">5</div>Bellingham</div>
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">6</div>Camavinga</div>
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">8</div>Valverde</div>
-                    </div>
-                    <div class="ps-fila-tactica">
+                    <div class="ps-fila-tactica" style="margin-bottom: 10px;">
                         <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">23</div>Mendy</div>
                         <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">22</div>Rüdiger</div>
                         <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">3</div>Militao</div>
                         <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">2</div>Carvajal</div>
                     </div>
-                    <!-- Manchester United Formación (4-2-3-1) -->
-                    <div class="ps-fila-tactica" style="margin-top: 30px;">
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">20</div>Dalot</div>
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">4</div>De Ligt</div>
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">6</div>Martinez</div>
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">3</div>Mazraoui</div>
+                    <div class="ps-fila-tactica" style="margin-bottom: 10px;">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">5</div>Bellingham</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">6</div>Camavinga</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">8</div>Valverde</div>
                     </div>
                     <div class="ps-fila-tactica">
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">18</div>Casemiro</div>
-                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">37</div>Mainoo</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">7</div>Vini Jr.</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">9</div>Mbappé</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-visita">11</div>Rodrygo</div>
+                    </div>
+                    
+                    <!-- Lado Manchester United (Alineación Inferior en 4-2-3-1) -->
+                    <div class="ps-fila-tactica" style="margin-top: 25px;">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">11</div>Højlund</div>
                     </div>
                     <div class="ps-fila-tactica">
                         <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">17</div>Garnacho</div>
                         <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">8</div>Fernandes</div>
                         <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">10</div>Rashford</div>
                     </div>
-                    <div class="ps-fila-tactica"><div class="ps-jugador-dot"><div class="ps-camiseta cam-local">11</div>Højlund</div></div>
+                    <div class="ps-fila-tactica">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">18</div>Casemiro</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">37</div>Mainoo</div>
+                    </div>
+                    <div class="ps-fila-tactica">
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">20</div>Dalot</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">4</div>De Ligt</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">6</div>Martinez</div>
+                        <div class="ps-jugador-dot"><div class="ps-camiseta cam-local">3</div>Mazraoui</div>
+                    </div>
                 </div>
-                <!-- BARRAS DE ESTADÍSTICAS NEÓN -->
+                <!-- PANEL HEAD TO HEAD: COMPARATIVA HISTÓRICA ANTES DEL PARTIDO -->
                 <div class="ps-stats-panel">
+                    <!-- Títulos de Champions -->
                     <div class="ps-stat-row">
-                        <div class="ps-stat-labels"><span>45%</span><span>POSESIÓN DE BALÓN</span><span>55%</span></div>
-                        <div class="ps-stat-bar-bg"><div class="ps-bar-local" style="width: 45%;"></div><div class="ps-bar-visita" style="width: 55%;"></div></div>
+                        <div class="ps-stat-labels"><span>3</span><span>TÍTULOS DE CHAMPIONS</span><span>15</span></div>
+                        <div class="ps-stat-bar-bg">
+                            <div class="ps-bar-local" style="width: 17%;"></div>
+                            <div class="ps-bar-visita" style="width: 83%;"></div>
+                        </div>
                     </div>
+                    <!-- Efectividad en Fase de Grupos -->
                     <div class="ps-stat-row">
-                        <div class="ps-stat-labels"><span>3</span><span>TIROS AL ARCO</span><span>6</span></div>
-                        <div class="ps-stat-bar-bg"><div class="ps-bar-local" style="width: 33%;"></div><div class="ps-bar-visita" style="width: 67%;"></div></div>
+                        <div class="ps-stat-labels"><span>68%</span><span>EFECTIVIDAD JORNADA 1</span><span>85%</span></div>
+                        <div class="ps-stat-bar-bg">
+                            <div class="ps-bar-local" style="width: 44%;"></div>
+                            <div class="ps-bar-visita" style="width: 56%;"></div>
+                        </div>
                     </div>
+                    <!-- Goles Promedio -->
                     <div class="ps-stat-row">
-                        <div class="ps-stat-labels"><span style="color:#eab308;">🟨 2</span><span>TARJETAS AMARILLAS</span><span style="color:#eab308;">1 🟨</span></div>
-                        <div class="ps-stat-bar-bg"><div class="ps-bar-local" style="width: 66%; background:#eab308;"></div><div class="ps-bar-visita" style="width: 34%; background:#cbd5e1;"></div></div>
+                        <div class="ps-stat-labels"><span>1.9</span><span>GOLES POR PARTIDO (25/26)</span><span>2.6</span></div>
+                        <div class="ps-stat-bar-bg">
+                            <div class="ps-bar-local" style="width: 42%;"></div>
+                            <div class="ps-bar-visita" style="width: 58%;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- TABLERO GENERAL -->
+    <!-- TABLERO PRINCIPAL -->
     <div class="dashboard-container">
         <header class="main-header">
             <h1>Arena Champions Pro</h1>
@@ -213,6 +242,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-der">
                 <div class="glass-card">
                     <h3 class="seccion-titulo">🏆 Jornada Actual</h3>
